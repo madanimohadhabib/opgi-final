@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,8 +86,10 @@ DATABASES = {
 }
 """
 
-DATABASES ={
-    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+DATABASE_URL = config('DATABASE_URL').replace("\'", "")
+
+DATABASES = {
+    'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
 }
 
 # Password validation
