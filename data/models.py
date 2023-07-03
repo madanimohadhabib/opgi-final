@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db import connections
 #from channels.layers import  get_channel_layer
-#from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync
 import json
 class wilaya(models.Model):
 
@@ -116,11 +116,44 @@ class Consultation (models.Model):
 
                 mois=models.PositiveIntegerField()
                 created_at = models.DateTimeField(auto_now_add=True)
-
                 total =models.FloatField()
                 
                 def __str__(self):
                     return self.occupant.nom_oc
+                
+               
+      
+
+                def calculer_dette(self):
+                        montant_dette = 0
+                        contrat_values = Contrat.objects.values().get(id=self.occupant.id)
+                        diff = self.created_at - contrat_values['date_strt_loyer']
+                        mois_entiers = int(diff.total_seconds() / 2628000)
+                        montant_dette = contrat_values['total_of_month'] * (mois_entiers)
+                        paye = contrat_values['total_of_month'] * self.mois
+                        montant_dette = paye - montant_dette
+                        print("montant_dette::::::::",montant_dette)
+                        if mois_entiers <= 0  or self.mois > mois_entiers:
+                            mois_entiers = 0
+                            montant_dette = 0
+                        
+                        self.montant_dette = abs(montant_dette)
+
+                        if montant_dette == 0:
+                                self.status = 'En règle'
+                        elif montant_dette > contrat_values['total_of_month']:
+                                 self.status = 'En dette'
+                        else:
+                                self.status = 'En dette'
+                        
+
+                        return montant_dette
+     
+               
+
+        
+       
+     
                 
                
                 
