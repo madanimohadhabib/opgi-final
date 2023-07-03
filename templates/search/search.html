@@ -1,0 +1,177 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card ">
+            
+            <div class="card-body">
+                <div id="accordion">
+                    <div class="card">
+                      <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                          <a class="btn btn-light" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Search<i class="m-r-10 mdi mdi-chevron-down"></i>
+                          </a>
+                        </h5>
+                      </div>
+                      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                          <form class="row gy-2 gx-3 align-items-center">
+                              <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search par nom et par prénom " aria-label="Search">
+                              
+                             
+                              
+                              <div class="row g-2">
+                                  <div class="col-sm">
+                                      {% if myFilter.form.unite.errors %}
+                                          <label for="{{ myFilter.form.unite.id_for_label }}" style="color:red;">Unite:</label>
+                                          {{ myFilter.form.unite }}
+                                          <p style="color:red;">{{ myFilter.form.unite.errors|join:", " }}</p>
+                                      {% else %}
+                                          <label for="{{ myFilter.form.unite.id_for_label }}">Unite:</label>
+                                          {{ myFilter.form.unite }}
+                                      {% endif %}
+                                  </div>
+                                  <div class="col-sm">
+                                      {% if myFilter.form.cite.errors %}
+                                          <label for="{{ myFilter.form.cite.id_for_label }}" style="color:red;">Cite:</label>
+                                          {{ myFilter.form.cite }}
+                                          <p style="color:red;">{{ myFilter.form.cite.errors|join:", " }}</p>
+                                      {% else %}
+                                          <label for="{{ myFilter.form.cite.id_for_label }}">Cite:</label>
+                                          {{ myFilter.form.cite }}
+                                      {% endif %}
+                                  </div>
+                                  <div class="col-sm">
+                                      {% if myFilter.form.batiment.errors %}
+                                          <label for="{{ myFilter.form.batiment.id_for_label }}" style="color:red;">Batiment:</label>
+                                          {{ myFilter.form.batiment }}
+                                          <p style="color:red;">{{ myFilter.form.batiment.errors|join:", "}} </p>
+                                      {% else %}
+                                          <label for="{{ myFilter.form.batiment.id_for_label }}">Batiment:</label>
+                                          {{ myFilter.form.batiment }}
+                                  {% endif %}
+                              </div>
+                            </div>
+                              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                          </form>
+                        </div>
+                      </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hovet">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id occupant </th>
+                <th scope="col">Nom occupant</th>
+                <th scope="col">Prénom occupant</th>
+                <th scope="col">Batiment</th>
+                <th scope="col">Cité</th>
+                <th scope="col">Unité</th>
+                <th scope="col">Wilaya</th>
+                <th scope="col">Action</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% if latest_consultations %}
+            {% for consultation in latest_consultations %}
+            <tr >
+                <th scope="row">{{ consultation.occupant.oc_id }}</th>
+                <th scope="row">{{ consultation.occupant.nom_oc }}</th>
+                <th scope="row">{{ consultation.occupant.prenom_oc }}</th>
+                <th scope="row">{{ consultation.logement.batiment }}</th>
+                <th scope="row">{{ consultation.logement.batiment.Cite }}</th>
+                <th scope="row">{{ consultation.logement.batiment.Cite.unite }}</th>
+                <th scope="row">{{ consultation.logement.batiment.Cite.unite.wilaya }}</th>
+                <th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail' consultation.id %}">Voir</a></th>
+            </tr>
+            {% endfor %}
+            {% elif  occupants %}
+            <h4>Les occupants sans dette </h4>
+            {% for occupant in occupants %}
+            <tr >
+                <th scope="row">{{ occupant.oc_id }}</th>
+                <th scope="row">{{ occupant.nom_oc }}</th>
+                <th scope="row">{{ occupant.prenom_oc }}</th>
+                {% for contrat in occupant.contrat_set.all %}
+                {% for logement in contrat.logement_set.all %}
+                <th scope="row">{{ logement.batiment }}</th>
+                <th scope="row">{{ logement.batiment.Cite }}</th>
+                <th scope="row">{{ logement.batiment.Cite.unite }}</th>
+                <th scope="row">{{ logement.batiment.Cite.unite.wilaya }}</th>
+                {% endfor %}
+                {% endfor %}
+                <th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail' occupant.id %}">Voir</a></th>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <th scope="row" colspan="10">No results found.</th>
+            {% endif %}
+        </tbody>
+    </table>
+
+    
+</div>
+
+
+<script>
+    $(document).ready(function() {
+
+        var unite_select = $('select#id_unite');
+
+        unite_select.change(function() {
+
+            $.ajax({
+                url: 'get_cites/',
+                data: {
+                    'unite_id': unite_select.val()
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var cite_select = $('select#id_cite');
+                    cite_select.empty();
+                    cite_select.append($('<option>').text('---------').attr('value', ''));
+                    $.each(data.cites, function(index, value) {
+                        cite_select.append($('<option>').text(value.lib_Cite).attr('value', value.id));
+                    });
+
+                    var batiment_select = $('select#id_batiment');
+                    batiment_select.empty();
+                    batiment_select.append($('<option>').text('---------').attr('value', ''));
+                        
+                }
+            });
+        });
+
+        var cite_select = $('select#id_cite');
+        cite_select.change(function() {
+
+            $.ajax({
+                url: 'get_batiments/',
+                data: {
+                    'Cite_id': cite_select.val()
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var batiment_select = $('select#id_batiment');
+                    batiment_select.empty();
+                    batiment_select.append($('<option>').text('---------').attr('value', ''));
+                    $.each(data.batiments, function(index, value) {
+                        batiment_select.append($('<option>').text(value.lib_Batiment).attr('value', value.id));
+                    });
+                }
+            });
+        });
+    });
+    </script>
+
+<script src="{% static 'JS/jquery.min.js' %}"></script>
+    {% endblock %}

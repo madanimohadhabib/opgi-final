@@ -1,0 +1,79 @@
+{% extends '../../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<style>
+.notification-invitation {
+  .card-body {
+    .card-title:before {
+      color: #90CAF9;
+      border-color: #90CAF9;
+      content: "\f007";
+    }
+  }
+}
+
+.notification-warning {
+  .card-body {
+    .card-title:before {
+      color: #FFE082;
+      border-color: #FFE082;
+      content: "\f071";
+    }
+  }
+}
+
+.notification-danger {
+  .card-body {
+    .card-title:before {
+      color: #FFAB91;
+      border-color: #FFAB91;
+      content: "\f00d";
+    }
+  }
+}
+
+.notification-reminder {
+  .card-body {
+    .card-title:before {
+      color: #CE93D8;
+      border-color: #CE93D8;
+      content: "\f017";
+    }
+  }
+}
+.notification-card.display-none{
+  display: none;
+  transition: opacity 2s;
+}
+</style>
+{% load myapp_tags %}
+
+{% if user|is_member_of_group:'service_contentieux' %}
+    <!-- Display content for users who belong to 'my_group_name' -->
+    <div class="row notification-container">
+   
+      <h1>Notifications</h1>
+      <ul id="notification-list">
+        {% if notifications %}
+          <ul>
+          {% for notification in notifications %}
+            <li>Nom  :  {{ notification.nom_oc }} | prénom : {{ notification.prenom_oc }} | created_at :{{ notification.created_at }}
+              <td><a  href="{% url 'chat:accepter' notification.message %}">voir plus  </a></td>
+            </li>
+    
+          {% endfor %}
+          </ul>
+        {% else %}
+          <p>No notifications to display.</p>
+        {% endif %}
+      </ul>
+     
+    </div>
+{% else %}
+{% endif %}
+
+
+  </div>
+
+
+{% endblock %}

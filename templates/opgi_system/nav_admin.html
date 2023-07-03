@@ -1,0 +1,65 @@
+{% load myapp_tags %}
+
+<header class="topbar" data-navbarbg="skin6">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <div class="navbar-header" data-logobg="skin6">
+            <!-- ============================================================== -->
+            <!-- Logo -->
+            <!-- ============================================================== -->
+            
+                <a class="navbar-brand" href="">
+                    <p>L'OPGI Mostaganem </p>
+                    </a>
+                
+            
+            <!-- ============================================================== -->
+            <!-- End Logo -->
+            <!-- ============================================================== -->
+            <!-- This is for the sidebar toggle which is visible on mobile only -->
+            <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                    class="mdi mdi-menu"></i></a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+            <ul class="navbar-nav float-start me-auto">
+                <li class="nav-item search-box">
+
+                </li>
+            </ul>
+           
+
+        </div>
+    </nav>
+</header>
+<aside class="left-sidebar" data-sidebarbg="skin6">
+
+    <div class="scroll-sidebar">
+
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+               
+                        
+
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                            href="{% url 'admin:index'%}" aria-expanded="false"><i
+                                class="mdi mdi-logout m-r-5 m-l-5"></i><span class="hide-menu">admin</span></a></li>
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                        href="{% url 'search:recherche'%}" aria-expanded="false"><i
+                            class="mdi mdi-magnify"></i><span class="hide-menu">search</span></a></li>  
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'accounts:profile' %}" aria-expanded="false"><i
+                        class="ti-user m-r-5 m-l-5"></i><span class="hide-menu">Profile</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'accounts:logout'%}" aria-expanded="false"><i
+                        class="mdi mdi-logout m-r-5 m-l-5"></i><span class="hide-menu">se déconnecter</span></a></li>    
+            </ul>
+
+        </nav>
+
+    </div>
+
+</aside>
+
+ 

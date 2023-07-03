@@ -1,0 +1,104 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+    /* CSS animation for form elements */
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animation to form elements */
+    .form-animate {
+      animation: fadeInRight 1s ease-in-out;
+    }
+
+    /* CSS animation for the chart */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Apply animation to the chart */
+    .chart-animate {
+      max-width: 100%;
+      height: auto;
+        overflow-x: scroll;
+        white-space: nowrap;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+  </style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+<h3>Statistique de unité : {{ unit }}</h3>
+</br>
+</br>
+<canvas id="chart" class="chart-animate"></canvas>
+
+<script>
+    $(".form-animate").addClass("animated").addClass("fadeInRight");
+    $(".chart-animate").addClass("animated").addClass("fadeIn");
+    var chartLabels = {{ chart_labels|safe }};
+    var chartDataTotal = {{ chart_data_total|safe }};
+    var chartDataTotalOfMonth = {{ chart_data_total_of_month|safe }};
+
+    var ctx = document.getElementById('chart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [
+                {
+                    label: 'Total',
+                    data: chartDataTotal,
+                    borderColor: 'rgba(99, 196, 132, 0.5)',
+                    backgroundColor: 'rgba(99, 196, 132, 0.5)',
+                    fill: true,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Total du mois',
+                    data: chartDataTotalOfMonth,
+                    borderColor: 'rgba(220,20,60, 0.5)',
+                    backgroundColor: 'rgba(220,20,60, 0.5)',
+                    fill: true,
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Month/Year'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Amount'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

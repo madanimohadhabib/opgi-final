@@ -1,0 +1,23 @@
+
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<div class="row notification-container">
+    <h1>Traitement juridique de dossier </h1>
+    <strong>Traité par:  
+        {% for user in occupant_settings_users %}
+        {{ user.created_by }} </strong>
+    </br>
+</br>
+
+    <a href="{% url 'chat:OccupantDetailView'  item%}">  voir plus le dossier</a>
+
+{% endfor %}
+      <br>
+      <br><br>
+      <br>
+
+
+</div>
+
+{% endblock %}

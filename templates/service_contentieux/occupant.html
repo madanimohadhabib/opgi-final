@@ -1,0 +1,39 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+{% if dossiers %}
+
+
+<span ><a  class="hello-msg" href="{% url 'chat:Occupant_settings' notifications.oc_id %}">Occupant settings</a></span>
+
+{% endif %}
+</br>
+</br>
+
+  <h3>Occupant <a href="{% url 'chat:generate_pdf' notifications.oc_id %}">pdf</a>
+</h3> 
+  <strong>oc_id </strong>  {{notifications.oc_id}}</p>
+ <strong>  Nom :  </strong>  {{notifications.nom_oc}}</p>
+ <strong>  Prenom :  </strong>  {{notifications.prenom_oc}}</p>
+ <strong>  date naissance :  </strong>  {{notifications.date_naiss}}</p>
+ <strong>  Lieu de naissance:  </strong>  {{notifications.lieu_naiss}}</p>
+ <strong>  created_at :  </strong>  {{notifications.created_at}}</p>
+
+
+
+ {% for contrat in contrats %}
+ <h3>Contrat</h3>
+</br>
+ <strong>Date:  </strong> {{ contrat.date_cnt }}</p>
+Loyer: {{ contrat.loyer }}</p>
+  Charge: {{ contrat.charge }}</p>
+   Loyer: {{ contrat.loyer }}</p>
+date_strt_loyer: {{ contrat.date_strt_loyer }}</p>
+<th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail' contrat.occupant.id %}">Voir</a></th>
+
+   <!-- add more fields here as desired -->
+ </ul>
+{% endfor %}
+
+
+{% endblock %}

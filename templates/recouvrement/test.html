@@ -1,0 +1,101 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .contain {
+        position: relative;
+    }
+    
+    .sidebar {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+  </style>
+
+<script>
+    const socket = new WebSocket(window.location.protocol.replace('http', 'ws') + '//' + window.location.host + '/ws/montant_mensuel_updates/{{ unit }}/' );
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        if (data.type === 'montant_mensuel_updates') {
+            const table = document.getElementById('montant_mensuel_table');
+            table.innerHTML = '<tr>' +
+                '<th>ID</th>' +
+                '<th>Unit</th>' +
+                '<th>Month</th>' +
+                '<th>Year</th>' +
+                '<th>Total</th>' +
+                '<th>Total of Month</th>' +
+                '<th>Percentage</th>' +
+                '</tr>';
+
+            data.data_montant_mensuel_updates.forEach(function(montant_mensuel) {
+                const row = '<tr>' +
+                    '<td>' + montant_mensuel.id + '</td>' +
+                    '<td>' + montant_mensuel.unite + '</td>' +
+                    '<td>' + montant_mensuel.mois + '</td>' +
+                    '<td>' + montant_mensuel.annee + '</td>' +
+                    '<td>' + montant_mensuel.total + '</td>' +
+                    '<td>' + montant_mensuel.total_of_month + '</td>' +
+                    '<td>' + montant_mensuel.percentage + '</td>' +
+                    '</tr>';
+
+                table.insertAdjacentHTML('beforeend', row);
+            });
+        }
+    };
+</script>
+
+    
+</head>
+<div class="contain">
+    <a class="sidebar waves-effect waves-dark sidebar"
+                    href="{% url 'recouvrement:montant_mensuel_chart' unit %}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span
+                        class="hide-menu"> Statistique</span></a>
+    </div>
+<h1> Unité : {{ unit }}</h1>
+{% if years %}
+  <ul>  Les années :
+  {% for year in years %}
+ <td><a  href="{% url 'recouvrement:montant_mensuel_updates_anne' unit year %}"> {{year }} </a></td>
+
+  {% endfor %}
+  </ul>
+{% else %}
+{% endif %}
+
+<body>
+    <div class="table-responsive">
+
+    <table id="montant_mensuel_table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Unité</th>
+                <th>Mois</th>
+                <th>Année</th>
+                <th>Total</th>
+                <th>Total du mois   </th>
+                <th>Pourcentage</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for montant in montants %}
+            <tr>
+                <td>{{ montant.id }}</td>
+                <td>{{ montant.unite.lib_unit }}</td>
+                <td>{{ montant.mois }}</td>
+                <td>{{ montant.annee }}</td>
+                <td>{{ montant.total }}</td>
+                <td>{{ montant.total_of_month }}</td>
+                <td>{{ montant.percentage }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    {% endblock %}

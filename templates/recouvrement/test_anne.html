@@ -1,0 +1,89 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<style>
+  .contain {
+      position: relative;
+  }
+  
+  .sidebar {
+      position: absolute;
+      top: 0;
+      right: 0;
+  }
+</style>
+    <h1>Montant Mensuel </h1>
+    <div class="contain">
+      <a class="sidebar waves-effect waves-dark sidebar"
+                      href="{% url 'recouvrement:montant_mensuel_chart_par_anne' unit anne %}" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span
+                          class="hide-menu"> Statistique</span></a>
+      </div>
+<p>Unité: {{ unit }}</p>
+<p>Annee: {{ anne }}</p>
+
+
+<div class="table-responsive">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mois</th>
+        <th>Total du mois        </th>
+        <th>Total</th>
+        <th>Pourcentage
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in data_montant_mensuel %}
+      <tr>
+        <td>{{ data.mois }}</td>
+        <td>{{ data.total_of_month }}</td>
+        <td>{{ data.total }}</td>
+        <td>{{ data.percentage }}%</td>
+      {% endfor %}
+      <tr>
+      <td>All </td>
+      <td>  {{ total_all_months }}</td>
+
+    </tr>
+
+
+    </tbody>
+  </table>
+</div>
+  <script>
+  
+    var socket = new WebSocket(window.location.protocol.replace('http', 'ws') + '//' + window.location.host + '/ws/montant_mensuel_updates_anne/{{ unit }}/{{ anne }}/' );
+
+    socket.onmessage = function(e) {
+      var data = JSON.parse(e.data);
+      if (data.type == 'montant_mensuel_data') {
+        updateTable(data.data_montant_mensuel);
+      }
+    };
+
+    function updateTable(data) {
+      var tbody = document.getElementsByTagName('tbody')[0];
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+      for (var i = 0; i < data.length; i++) {
+        var row = document.createElement('tr');
+        var mois = document.createElement('td');
+        mois.innerText = data[i].mois;
+        var total_of_month = document.createElement('td');
+        total_of_month.innerText = data[i].total_of_month;
+        var total = document.createElement('td');
+        total.innerText = data[i].total;
+        var percentage = document.createElement('td');
+        percentage.innerText = data[i].percentage + '%';
+        row.appendChild(mois);
+        row.appendChild(total_of_month);
+        row.appendChild(total);
+        row.appendChild(percentage);
+        tbody.appendChild(row);
+      }
+    }
+  </script>
+  {% endblock %}

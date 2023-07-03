@@ -1,0 +1,66 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<h1>Notifications</h1>
+
+	<ul id="notification-list">
+		<div class="row notification-container">
+   
+			<ul id="notification-list">
+			  {% if notifications %}
+				<ul>
+				{% for notification in notifications %}
+				  <li>{{ notification.unite }} {{ notification.created_at }}
+					<td><a  href="{% url 'recouvrement:accepter' notification.id %}">voir plus  </a></td>
+
+				  </li>
+		  
+				{% endfor %}
+				</ul>
+			  {% else %}
+				<p>No notifications to display.</p>
+			  {% endif %}
+			</ul>
+		   
+		  </div>
+	</ul>
+	<script>
+		
+		const host = window.location.host;
+    const protocol = window.location.protocol.replace('http', 'ws');
+    const socket1 = new WebSocket(protocol + '//' + host + '/ws/chef_service/');
+    socket1.onopen = function (e) {
+      console.log('Connection established');
+    };
+	
+	  
+		socket1.onmessage = function(event) {
+		  var data = JSON.parse(event.data);
+		  if (data.type === 'chef_service') {
+			  const count = data.count;
+			  document.getElementById('notification_count_recouvrement').innerHTML = count;
+			  var notificationList = document.querySelector('#notification-list');
+			  notificationList.innerHTML = '';
+			  for (var i = 0; i < data.notifications.length; i++) {
+				  var notification = data.notifications[i];
+				  var tr = document.createElement('tr');
+				  var td1 = document.createElement('td');
+				  var a = document.createElement('a');
+				  a.href = "/accepter/" + notification.message + "/";
+				  a.innerHTML = "Ajouter";
+				  td1.appendChild(a);
+				  var td2 = document.createElement('td');
+				  td2.textContent = notification.unite +  ' - '+ notification.created_at ;
+				  tr.appendChild(td1);
+				  tr.appendChild(td2);
+				  notificationList.appendChild(tr);
+			  }
+		  }
+	  }
+		
+	  socket1.onclose = function (e) {
+		  console.log('Connection closed');
+		};
+	  </script>
+	
+	  {% endblock %}

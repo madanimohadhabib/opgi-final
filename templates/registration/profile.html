@@ -1,0 +1,20 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<h1> Profile</h1>
+</br>
+
+{% if is_logged_in %}
+<!-- profile.html -->
+<p> <strong> username: <strong> {{user.username}} </p>
+<p> email: {{user.email}} </p>
+
+<p>Last Login: {{ last_login|date:"F j, Y, g:i a" }}</p>
+<p>Device: {{ device_name }}</p>
+<p>Browser: {{ browser_name }}</p>
+<p>Duration: {{ duration_days }} days, {{ duration_hours }} hours, {{ duration_minutes }} minutes, {{ duration_seconds }} seconds</p>
+
+{% else %}
+    <p>You are not logged in.</p>
+{% endif %}
+{% endblock %}

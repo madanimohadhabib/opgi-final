@@ -1,0 +1,14 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+<h1> accepter  </h1>
+<form action="{% url 'recouvrement:accepter' item  %}" method="POST">
+				
+    {% csrf_token %}
+    <a class="btn btn-warning" href="{% url 'home' %}">Cancel</a>
+
+    <input class="btn btn-danger" type="submit" name="accepter"> 
+</form>
+
+{% endblock %}

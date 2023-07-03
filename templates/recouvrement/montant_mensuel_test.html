@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Montant Mensuel Updates</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Unit</th>
+          <th>Total</th>
+          <th>Total of Month</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+        {% for montant in montants %}
+        <tr>
+            <td><a  href="{% url 'recouvrement:montant_mensuel_updates' montant.unite %}"> {{ montant.unite }} </a></td>
+
+          <td>{{ montant.total }}</td>
+          <td>{{ montant.total_of_month }}</td>
+          <td>{{ montant.percentage }}%</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td><strong>All Units</strong></td>
+            <td>{{ all_totals.total }}</td>
+            <td>{{ all_totals.total_of_month }}</td>
+            <td></td>
+            <td></td>
+          </tr>
+      </tbody>
+   
+    </table>
+    <script>
+      var socket = new WebSocket("ws://" + window.location.host + "/ws/montant_mensuel/");
+
+      socket.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        console.log("Received MontantMensuel data:", data);
+
+        // Clear previous data
+        $("#data").empty();
+
+        // Display new data
+        for (var unite in data["data_by_unit"]) {
+          var unitData = data["data_by_unit"][unite];
+          var totalForUnit = unitData[0]["total_for_unit"];
+          var totalOfMonthForUnit = unitData[0]["total_of_month_for_unit"];
+          var percentageForUnit = unitData[0]["percentage_for_unit"];
+
+          var html = "<tr>";
+          html += "<td>" + unite + "</td>";
+          html += "<td>" + totalForUnit + "</td>";
+          html += "<td>" + totalOfMonthForUnit + "</td>";
+          html += "<td>" + percentageForUnit + "%</td>";
+          html += "</tr>";
+
+          $("#data").append(html);
+        }
+
+        // Display totals for all units
+        var allTotals = data["all_totals"];
+        var html = "<tr>";
+        html += "<td>All Units</td>";
+        html += "<td>" + allTotals["total"] + "</td>";
+        html += "<td>" + allTotals["total_of_month"] + "</td>";
+        html += "<td></td>";
+        html += "</tr>";
+
+        $("#data").append(html);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Webpage</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <h1>service_contentieux </h1>
+  <strong>oc_id </strong>  {{notifications.oc_id}}</p>
+ <strong>  nom_oc :  </strong>  {{notifications.nom_oc}}</p>
+ <strong>  prenom_oc :  </strong>  {{notifications.prenom_oc}}</p>
+ <strong>  date_naiss :  </strong>  {{notifications.date_naiss}}</p>
+ <strong>  lieu_naiss :  </strong>  {{notifications.lieu_naiss}}</p>
+ <strong>  created_at :  </strong>  {{notifications.created_at}}</p>
+ {% for contrat in contrats %}
+ <p>Contrat {{ contrat.id }}:</p>
+ <ul>
+   <li>Date: {{ contrat.date_cnt }}</li>
+   <li>Loyer: {{ contrat.loyer }}</li>
+   <!-- add more fields here as desired -->
+ </ul>
+{% endfor %}
+  <form id="add-service-contentieux-dossier-form">
+    {% csrf_token %}
+    <label for="created_by">Created By:</label>
+    <input type="hidden" type="text" id="created_by" name="created_by">
+    <br><br>
+    <label for="dossier">Dossier:</label>
+    <input type="hidden" type="text" id="dossier" name="dossier">
+    <br><br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="active">Active</option>
+      <option value="terminer">Terminer</option>
+    </select>
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Alert</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="alert-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="service-contentieux-dossier-list"></div>
+
+  <script>
+    $(document).ready(function() {
+      $('#add-service-contentieux-dossier-form').submit(function(event) {
+        event.preventDefault();
+        var form_data = $(this).serialize();
+        $.ajax({
+          url: '{% url "chat:add_service_contentieux_dossier" %}',
+          type: 'POST',
+          data: form_data,
+          success: function(response) {
+            if (response.success) {
+            
+              $('#alert-message').html('Service contentieux dossier added successfully!');
+              $('#myModal').modal('show'); // Show the modal dialog box
+            } else {
+              $('#alert-message').html('Service contentieux dossier addition failed!');
+              $('#myModal').modal('show'); // Show the modal dialog box
+            }
+          },
+          error: function() {
+            $('#alert-message').html('Error adding service contentieux dossier!');
+            $('#myModal').modal('show'); // Show the modal dialog box
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+    <h1>Résultats de la recherche</h1>
+
+    <form method="get" action="{% url 'chat:search_archive' %}">
+        <input type="text" name="q" placeholder="Recherche...">
+        <button  class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
+    </form>
+
+ 
+    {% if results %}
+</br>
+</br>
+
+    <h2>Résultats :</h2>
+
+</br>
+
+    <ul>
+        {% for occupant in occupants %}
+            <li> Nom:{{ occupant.nom_oc }} | prenom :{{ occupant.prenom_oc }} | od_id:{{ occupant.oc_id }}  <a type="button" href="{% url 'chat:archive_list_by_user' occupant.oc_id %}">archive</a> <a type="button" href="{% url 'search:occupant_detail' occupant.id %}">voir plus</a></li>
+       
+
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun résultat trouvé.</p>
+{% endif %}
+{% endblock %}

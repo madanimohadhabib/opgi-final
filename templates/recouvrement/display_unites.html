@@ -1,0 +1,37 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+    <h1> Recherche par unité</h1>
+</br>
+
+    <form method="get" action="">
+        <input type="text" name="query" value="{{ query }}">
+        <button  class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
+    </form>
+</br>
+</br>
+<h3>Liste des unités</h3>
+</br>
+
+    <div class="table-responsive">
+        <table class="table">
+            <tbody>
+                {% for unite in unites %}
+                    <tr>
+                        <th>Unité</th>
+                        <td><a href="{% url 'recouvrement:montant_mensuel_updates'  unite.lib_unit %}">{{  unite.lib_unit }}</a></td>
+
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="2">Aucune unité trouvée.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    
+    
+    
+    {% endblock %}

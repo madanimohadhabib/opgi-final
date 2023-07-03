@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Modal Popup with AJAX</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<form id="add-service-contentieux-dossier-form">
+    {% csrf_token %}
+    <label for="created_by">Created By:</label>
+    <input type="text" id="created_by" name="created_by">
+    <br><br>
+    <label for="dossier">Dossier:</label>
+    <input type="text" id="dossier" name="dossier">
+    <br><br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="active">Active</option>
+      <option value="terminer">Terminer</option>
+    </select>
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+  
+  <div id="service-contentieux-dossier-list"></div>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#add-service-contentieux-dossier-form').submit(function(event) {
+        event.preventDefault();
+        var form_data = $(this).serialize();
+        $.ajax({
+          url: '{% url "chat:add_service_contentieux_dossier" %}',
+          type: 'POST',
+          data: form_data,
+          success: function(response) {
+            if (response.success) {
+              var data = response.data;
+              var html = '<p>ID: ' + data.id + '</p>';
+              html += '<p>Created By: ' + data.created_by + '</p>';
+              html += '<p>Dossier: ' + data.dossier + '</p>';
+              html += '<p>Status: ' + data.status + '</p>';
+              $('#service-contentieux-dossier-list').append(html);
+              alert('Service contentieux dossier added successfully!');
+            } else {
+              alert('Service contentieux dossier addition failed!');
+            }
+          },
+          error: function() {
+            alert('Error adding service contentieux dossier!');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

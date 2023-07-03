@@ -1,0 +1,66 @@
+{% block start %}
+
+<div id="notification-count">          <a href="{% url 'chat:notifications' %}" >
+  {{notification_count}}           </a>
+</div>
+<span class="hello-msg">Hello, {{request.user}}</span>
+  <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+  <span ><a  class="hello-msg" href="{% url 'chat:service_contentieux' %}">service_contentieux</a></span>
+
+<div class="container mt-5 pt-5">
+  <h1>Notifications</h1>
+  <ul id="notification-list">
+    {% if notifications %}
+      <ul>
+      {% for notification in notifications %}
+        <li>{{ notification.message }} -  {{ notification.nom_oc }}- {{ notification.prenom_oc }}-{{ notification.created_at }}
+          <td><a  href="{% url 'chat:accepter' notification.message %}">Ajouter  </a></td>
+        </li>
+
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p>No notifications to display.</p>
+    {% endif %}
+  </ul>
+ 
+</div>
+
+
+<script>
+  const socket = new WebSocket('ws://localhost:8000/ws/test/' );
+  socket.onopen = function (e) {
+    console.log('Connection established');
+  };
+
+  socket.onmessage = function(event) {
+    var data = JSON.parse(event.data);
+    if (data.type === 'notifications') {
+        const count = data.count;
+        document.getElementById('notification-count').innerHTML = count;
+        var notificationList = document.querySelector('#notification-list');
+        notificationList.innerHTML = '';
+        for (var i = 0; i < data.notifications.length; i++) {
+            var notification = data.notifications[i];
+            var tr = document.createElement('tr');
+            var td1 = document.createElement('td');
+            var a = document.createElement('a');
+            a.href = "/accepter/" + notification.message + "/";
+            a.innerHTML = "Ajouter";
+            td1.appendChild(a);
+            var td2 = document.createElement('td');
+            td2.textContent = notification.message + ' - '+  notification.nom_oc+' - ' + notification.prenom_oc + ' - '+ notification.created_at ;
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            notificationList.appendChild(tr);
+        }
+    }
+}
+  
+socket.onclose = function (e) {
+    console.log('Connection closed');
+  };
+</script>
+
+
+{% endblock %}

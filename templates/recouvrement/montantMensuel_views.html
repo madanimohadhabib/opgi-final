@@ -1,0 +1,125 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<style>
+    /* CSS animation for form elements */
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animation to form elements */
+    .form-animate {
+      animation: fadeInRight 1s ease-in-out;
+    }
+
+    /* CSS animation for the chart */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Apply animation to the chart */
+    .chart-animate {
+      animation: fadeIn 1s ease-in-out;
+    }
+  </style>
+{% include '../recouvrement/montant_mensuel.html' %}
+<td><a href="{% url 'recouvrement:display_unites'   %}">voir plus la liste des unités
+</a></td>
+
+</br>
+</br>
+</br>
+
+    <div class="col-12">
+        <div class="card ">
+            
+                <div id="accordion">
+                    <div class="card">
+                      <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                          <a class="btn btn-light" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Statistique<i class="m-r-10 mdi mdi-chevron-down"></i>
+                          </a>
+                        </h5>
+                      </div>
+                      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <form method="GET" action="{% url 'recouvrement:chart_view' %}" class="form-animate">
+                                <label for="lib_unit">Lib Unit:</label>
+                                <select id="lib_unit" name="lib_unit">
+                                  <option value="">All</option>
+                                  {% for unit in lib_unit_values %}
+                                    <option value="{{ unit }}" {% if unit == selected_lib_unit %}selected{% endif %}>{{ unit }}</option>
+                                  {% endfor %}
+                                </select>
+                                <label for="mois">Mois:</label>
+                                <input type="number" id="mois" name="mois" value="{{ selected_mois|default_if_none:'' }}" oninput="validateNumberInput(this)">
+                                
+                                    
+                                <label for="annee">Annee:</label>
+                                <input type="text" id="annee" name="annee" value="{{ selected_annee|default_if_none:'' }}">
+                                <button type="submit">Filter</button>
+                              </form>
+                              <canvas id="myChart" class="chart-animate"></canvas>
+
+                        </div>
+                      </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".form-animate").addClass("animated").addClass("fadeInRight");
+    $(".chart-animate").addClass("animated").addClass("fadeIn");
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{
+          label: 'Total',
+          data: {{ chart_values_total|safe }},
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }, {
+          label: 'Total of Month',
+          data: {{ chart_values_total_of_month|safe }},
+          backgroundColor: 'rgba(192, 75, 192, 0.2)',
+          borderColor: 'rgba(192, 75, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            precision: 0
+          }
+        }
+      }
+    });
+  });
+</script>
+
+
+    
+
+
+
+
+    {% endblock %}

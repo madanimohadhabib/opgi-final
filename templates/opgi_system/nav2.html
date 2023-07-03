@@ -1,0 +1,170 @@
+{% load myapp_tags %}
+
+<header class="topbar" data-navbarbg="skin6">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <div class="navbar-header" data-logobg="skin6">
+            <!-- ============================================================== -->
+            <!-- Logo -->
+            <!-- ============================================================== -->
+            
+                <a class="navbar-brand" href="">
+                    <p>L'OPGI Mostaganem </p>
+                    </a>
+                
+            
+            <!-- ============================================================== -->
+            <!-- End Logo -->
+            <!-- ============================================================== -->
+            <!-- This is for the sidebar toggle which is visible on mobile only -->
+            <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                    class="mdi mdi-menu"></i></a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+            <ul class="navbar-nav float-start me-auto">
+                <li class="nav-item search-box">
+
+                </li>
+            </ul>
+            {% if user|is_member_of_group:'service_contentieux' %}
+
+            <a type="button" class="btn text-dark position-relative" style="margin-right: 25px;" href="{% url 'chat:notifications' %}">
+                <i class="m-r-10 mdi mdi-bell" style="font-size: 20px;"></i>
+
+                <span  id="notification-count"  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                    {{notification_count}}
+
+                </span>
+
+                
+            </a>
+            {% elif user|is_member_of_group:'service_recouvrement' %} 
+
+            <a type="button" class="btn text-dark position-relative" style="margin-right: 25px;" href="{% url 'recouvrement:notifications' %}">
+                <i class="m-r-10 mdi mdi-bell" style="font-size: 20px;"></i>
+
+                <span  id="notification_count_recouvrement_2"  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                    {{notification_count_recouvrement}}
+
+                </span>
+
+                
+            </a>
+            {% endif %}
+
+        </div>
+    </nav>
+</header>
+<aside class="left-sidebar" data-sidebarbg="skin6">
+
+    <div class="scroll-sidebar">
+
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'home' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
+                        class="hide-menu">Dashboard</span></a></li>
+                        {% if user|is_member_of_group:'service_contentieux' %}
+
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'chat:service_contentieux' %}" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
+                        class="hide-menu">Service contentieux</span></a></li>
+                        {% elif user|is_member_of_group:'service_recouvrement' %} 
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                            href="{% url 'recouvrement:recouvrement' %}" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
+                                class="hide-menu">Service recouvrement</span></a></li>
+                        {% endif %}
+
+                        {% if user|is_member_of_group:'service_contentieux' %}
+
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'chat:notifications' %}" aria-expanded="false"><i
+                        class="m-r-10 mdi mdi-bell"></i><span class="hide-menu">Notification</span> 
+
+                        <span  id="notification-count-2" class="badge bg-danger"  >     
+                                           {{notification_count}}
+                        </span>                
+                    </a></li>
+              {% elif user|is_member_of_group:'service_recouvrement' %} 
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                        href="{% url 'recouvrement:notifications' %}" aria-expanded="false"><i
+                            class="m-r-10 mdi mdi-bell"></i><span class="hide-menu">Notification</span> 
+
+                            <span  id="notification_count_recouvrement" class="badge bg-danger"  >     
+                                               {{notification_count_recouvrement}}
+                            </span>                
+                        </a></li>
+                        
+
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                            href="{% url 'recouvrement:display_unites'%}" aria-expanded="false"><i
+                                class="mdi mdi-logout m-r-5 m-l-5"></i><span class="hide-menu">Constatation</span></a></li>
+                    {% endif %}
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                        href="{% url 'search:recherche'%}" aria-expanded="false"><i
+                            class="mdi mdi-magnify"></i><span class="hide-menu">search</span></a></li>  
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'accounts:profile' %}" aria-expanded="false"><i
+                        class="ti-user m-r-5 m-l-5"></i><span class="hide-menu">Profile</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'accounts:logout'%}" aria-expanded="false"><i
+                        class="mdi mdi-logout m-r-5 m-l-5"></i><span class="hide-menu">se déconnecter</span></a></li>    
+            </ul>
+
+        </nav>
+
+    </div>
+
+</aside>
+<script>
+
+    const host = window.location.host;
+    const protocol = window.location.protocol.replace('http', 'ws');
+    const socket1 = new WebSocket(protocol + '//' + host + '/ws/chef_service/');
+    socket1.onopen = function (e) {
+      console.log('Connection established');
+    };
+    
+  
+    socket1.onmessage = function(event) {
+      var data = JSON.parse(event.data);
+      if (data.type === 'chef_service') {
+        const notification_count_recouvrement = data.count;
+        const notification_count_recouvrement_2 = data.count;
+
+        document.getElementById('notification_count_recouvrement').innerHTML = notification_count_recouvrement;
+        document.getElementById('notification_count_recouvrement').style.display = 'inline-block'; // display the span element
+
+        document.getElementById('notification_count_recouvrement_2').innerHTML = notification_count_recouvrement_2;
+        document.getElementById('notification_count_recouvrement_2').style.display = 'inline-block';
+
+      
+          var notificationList = document.querySelector('#notification-list');
+          notificationList.innerHTML = '';
+          for (var i = 0; i < data.notifications.length; i++) {
+              var notification = data.notifications[i];
+              var tr = document.createElement('tr');
+              var td1 = document.createElement('td');
+              var a = document.createElement('a');
+              const id = notification.id;
+              const url = "/recouvrement/accepter/" + encodeURIComponent(id.toString()) + "/";
+              a.href = url;
+              a.innerHTML = "Ajouter";
+              td1.appendChild(a);
+              var td2 = document.createElement('td');
+              td2.textContent = notification.unite +  ' - '+ notification.created_at ;
+              tr.appendChild(td1);
+              tr.appendChild(td2);
+              notificationList.appendChild(tr);
+          }
+      }
+  }
+    
+  socket1.onclose = function (e) {
+      console.log('Connection closed');
+    };
+  </script>

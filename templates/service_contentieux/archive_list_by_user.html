@@ -1,0 +1,19 @@
+{% extends '../opgi_system/layout.html' %}
+
+{% block content %}
+    {% load static %}
+    <h1>Archives pour l'utilisateur : {{ occupant.nom_oc }} {{ occupant.prenom_oc }}</h1>
+
+    <ul>
+        {% for result in results %}
+            <li>  Dossier traité par:{{ result.created_by }},     Date fin de traitement: {{ result.created_at }}</li>
+        {% empty %}
+            <li>Aucune archive trouvée pour cet utilisateur</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block extra_css %}
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+{% endblock %}

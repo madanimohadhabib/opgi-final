@@ -1,0 +1,26 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+	<ul >
+		<div class="row notification-container">
+   
+			<h1> Les  Alertes des unités</h1>
+			<ul>
+
+				<ul>
+				{% for notification_alert in notifications_alert %}
+				  <li>{{ notification_alert.unite }} {{ notification_alert.created_at }}
+					<td><a  href="{% url 'recouvrement:generate_pdf' notification_alert.id %}">voir plus  </a></td>
+
+				  </li>
+		  
+				{% endfor %}
+				</ul>
+			</ul>
+		   
+		  </div>
+	</ul>
+	
+	
+	  {% endblock %}

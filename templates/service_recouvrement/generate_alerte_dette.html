@@ -1,0 +1,50 @@
+
+{% block content %}
+<div class="container">
+<div class="text-center">
+    <h5 class="cart-title text-center">République Algérienne Démocratique et Populaire</h5>
+    <h5 class="cart-title text-center">Ministère du L'Habitat, de L'Urbanisme et de la Ville</h5>
+    <h5 class="cart-title text-center">Office de Promotion et de Gestion Immobilière Wilaya de Mostaganem</h5>
+</div><br>
+<div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="text-center">
+            <h4 class="cart-title text-center"><span class="border border-success">Avertissement</span></h4>
+        </div>
+      </div>
+    </div>
+  </div><br>
+  <div class="container">
+    <div class="text-center">
+        <h6 class="cart-title text-left">M/Mme: {{ consultation.occupant.nom_oc }} {{ consultation.occupant.prenom_oc }}</h6>
+        <h6 class="cart-title text-left">Exploité: Logement de batiemnt {{ consultation.logement.batiment.lib_Batiment }} dans la {{ consultation.logement.batiment.Cite.lib_Cite }}</h6>
+        <h6 class="cart-title text-left">Votre utilisation de l'adresse locative mentionnée ci-dessus, qui reflète la relation contractuelle entre vous (locataire) et le Bureau de Promotion et de Gestion Immobilière de wilaya de {{ consultation.logement.batiment.Cite.unite.wilaya.lib_wilaya }} (bailleur), implique l'obligation de payer le montant de l'allocation de loyer chaque mois et périodiquement</h6>
+    </div>
+  </div>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th scope="row">Montant du loyer principal</th>
+        <td>{{ consultation.logement.prix_logement }} DA</td>
+      </tr>
+      <tr>
+        <th scope="row">Période revendiquée</th>
+        <td>{{ consultation.created_at }}</td>
+
+      </tr>
+      <tr>
+        <th scope="row">nombre de mois</th>
+        <td >{{ consultation.mois }}</td>
+
+      </tr>
+      <tr>
+        <th scope="row">Dette</th>
+        <td >{{ consultation.montant_dette }} DA</td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+{% endblock %}

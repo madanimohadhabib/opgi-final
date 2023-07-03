@@ -1,0 +1,35 @@
+
+{% block content %}
+{% load static %}
+<style>
+    .card-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+  
+    .card-stat{
+        width: 900px;
+        border-radius: 50px;
+    }
+</style>
+<div class="container">
+    <div class="row mt-4">
+      <div class="col-md-6 offset-md-3">
+        <h2 class="text-center"></h2>
+        <div class="card-container">
+            <div class="card-stat">
+                <div class="card-body bg-info text-white">
+                    <center>
+                        <p class="card-title"> Nombre total  des dossier  de service contentieux en cours de traitement</p>
+                        <p class="card-text" style="font-size: 32px;">{{ count }}</p>
+                    </center>
+                </div>
+            </div>
+        
+        </div>
+       
+        
+      
+
+    {% endblock %}

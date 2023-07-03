@@ -1,0 +1,54 @@
+
+
+    
+    <form method="GET" action="{% url 'recouvrement:chart_view' %}">
+            <label for="lib_unit">Lib Unit:</label>
+            <select id="lib_unit" name="lib_unit">
+                <option value="">All</option>
+                {% for unit in lib_unit_values %}
+                  <option value="{{ unit }}" {% if unit == selected_lib_unit %}selected{% endif %}>{{ unit }}</option>
+                {% endfor %}
+              </select>
+                          <label for="mois">Mois:</label>
+            <input type="text" id="mois" name="mois" value="{{ selected_mois|default_if_none:'' }}">
+            <label for="annee">Annee:</label>
+            <input type="text" id="annee" name="annee" value="{{ selected_annee|default_if_none:'' }}">
+            <button type="submit">Filter</button>
+        </form>
+    
+        <canvas id="myChart"></canvas>
+    
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ chart_labels|safe }},
+                        datasets: [{
+                            label: 'Total',
+                            data: {{ chart_values_total|safe }},
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Total of Month',
+                            data: {{ chart_values_total_of_month|safe }},
+                            backgroundColor: 'rgba(192, 75, 192, 0.2)',
+                            borderColor: 'rgba(192, 75, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+

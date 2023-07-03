@@ -1,0 +1,36 @@
+{% extends '../opgi_system/layout.html' %}
+
+{% block content %}
+{% load static %}
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hovet">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Unité</th>
+                                                <th scope="col">Total</th>
+                                                <th scope="col">Total du mois</th>
+                                                <th scope="col">Pourcentage</th>
+                                                <th scope="col">Action</th>
+                                        </thead>
+                                        <tbody>
+                                            {% if consultations %}
+                                            {% for consultation in consultations %}
+                                            <tr >
+                                                <th scope="row">{{ consultation.unite }}</th>
+                                                <th scope="row">{{ consultation.montant_dette }} DA</th>
+                                                <th scope="row">{{ consultation.montant_dette }} DA</th>
+                                                <th scope="row">{{ consultation.montant_dette }} %</th>
+                                                <th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'recouvrement:constatation_par_unite' consultation.id %}">View</a></th>
+                                    
+                                            </tr>
+                                            {% endfor %}
+                                            {% else %}
+                                            <th scope="row" colspan="10">No results found.</th>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+<script src="{% static 'JS/jquery.min.js' %}"></script>
+{% endblock %}

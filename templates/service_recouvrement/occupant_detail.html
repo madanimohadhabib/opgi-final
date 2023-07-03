@@ -1,0 +1,317 @@
+{% extends "../opgi_system/layout.html" %}
+{% block content %}
+
+<!-- List group -->
+<div class="list-group" id="myList" role="tablist">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" data-toggle="list" href="#home" role="tab">Occupant</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="list" href="#profile" role="tab">Contrat</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="list" href="#messages" role="tab">Logement</a>
+        </li>
+        
+        {% if consultation %}
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="list" href="#settings" role="tab">Consultation</a>
+        </li>
+        {% else%}
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="list" href="#test" role="tab">L'état d'avancement</a>
+          </li>
+          {% endif %}
+
+      </ul>
+  </div>
+  
+  <!-- Tab panes -->
+  <div class="table-responsive">
+  <div class="tab-content">
+    <div class="tab-pane active" id="home" role="tabpanel">
+        <table class="table table-striped table-bordered table-hovet">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id occupant </th>
+                    <th scope="col">Nom occupant</th>
+                    <th scope="col">Prénom occupant</th>
+                    <th scope="col">Date de naissance</th>
+                    <th scope="col">Lieu de naissance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% if consultation %}
+                    <th scope="row">{{ consultation.occupant.oc_id }}</th>
+                    <th scope="row">{{ consultation.occupant.nom_oc }}</th>
+                    <th scope="row">{{ consultation.occupant.prenom_oc }}</th>
+                    <th scope="row">{{ consultation.occupant.date_naiss|date:"d F Y" }}</th>
+                    <th scope="row">{{ consultation.occupant.lieu_naiss }}</th>
+                    {% else%}
+                    <th scope="row">{{ occupant.oc_id }}</th> 
+                    <th scope="row">{{ occupant.nom_oc }}</th>
+                    <th scope="row">{{ occupant.prenom_oc }}</th>
+                    <th scope="row">{{ occupant.date_naiss|date:"d F Y" }}</th>
+                    <th scope="row">{{ occupant.lieu_naiss }}</th>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="profile" role="tabpanel">
+        <table class="table table-striped table-bordered table-hovet">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">occupant </th>
+                    <th scope="col">Date de contrat</th>
+                    <th scope="col">Date de début de loyer</th>
+                    <th scope="col">Loyer</th>
+                    <th scope="col">Charge</th>
+                    <th scope="col">TVA</th>
+                    <th scope="col">Total du mois</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% if consultation %}
+                    <th scope="row">{{ consultation.logement.contrat.occupant }}</th>
+                    <th scope="row">{{ consultation.logement.contrat.date_cnt|date:"d F Y" }}</th>
+                    <th scope="row">{{ consultation.logement.contrat.date_strt_loyer|date:"d F Y" }}</th>
+                    <th scope="row">{{ consultation.logement.contrat.loyer }} DA</th>
+                    <th scope="row">{{ consultation.logement.contrat.charge }} DA</th>
+                    <th scope="row">{{ consultation.logement.contrat.mnt_tva}} %</th>
+                    <th scope="row">{{ consultation.logement.contrat.total_of_month }} DA</th>
+                    {% else%}
+                    {% for contrat in contrats %}
+                    <th scope="row">{{ contrat.occupant }}</th>
+                    <th scope="row">{{ contrat.date_cnt|date:"d F Y" }}</th>
+                    <th scope="row">{{ contrat.date_strt_loyer|date:"d F Y" }}</th>
+                    <th scope="row">{{ contrat.loyer }} DA</th>
+                    <th scope="row">{{ contrat.charge }} DA</th>
+                    <th scope="row">{{ contrat.mnt_tva}} %</th>
+                    <th scope="row">{{ contrat.total_of_month }} DA</th>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="messages" role="tabpanel">
+        <table class="table table-striped table-bordered table-hovet">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Contrat</th>
+                    <th scope="col">Batiment</th>
+                    <th scope="col">Cité</th>
+                    <th scope="col">Unité</th>
+                    <th scope="col">Surface</th>
+                    <th scope="col">Prix logement</th>
+                    <th scope="col">Type logement</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% if consultation %}
+                    <th scope="row">{{ consultation.logement.contrat.occupant }}</th>
+                    <th scope="row">{{ consultation.logement.batiment.lib_Batiment }}</th>
+                    <th scope="row">{{ consultation.logement.batiment.Cite.lib_Cite }}</th>
+                    <th scope="row">{{ consultation.logement.batiment.Cite.unite.lib_unit }}</th>
+                    <th scope="row">{{ consultation.logement.surface }} m²</th>
+                    <th scope="row">{{ consultation.logement.prix_logement }} DA</th>
+                    <th scope="row">{{ consultation.logement.type_logement }}</th>
+                    {% else%}
+                    {% for logement in logements %}
+                    <th scope="row">{{ logement.contrat.occupant }}</th>
+                    <th scope="row">{{ logement.batiment.lib_Batiment }}</th>
+                    <th scope="row">{{ logement.batiment.Cite.lib_Cite }}</th>
+                    <th scope="row">{{ logement.batiment.Cite.unite.lib_unit }}</th>
+                    <th scope="row">{{ logement.surface }} m²</th>
+                    <th scope="row">{{ logement.prix_logement }} DA</th>
+                    <th scope="row">{{ logement.type_logement }}</th>
+                    {% endfor %}
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="test" role="tabpanel">
+        <table class="table table-striped table-bordered table-hovet">
+            <thead class="thead-dark">
+                <tr>
+
+                    {% if status  == 'En règle'%}
+                    <th scope="col">Mois d'avance</th>
+
+                    <th scope="col">montant d'avance</th>
+
+                    {% elif status == 'En dette' %}
+                    <th scope="col">Mois</th>
+
+                    <th scope="col">montant de dette</th>
+
+                    {% endif %}
+
+                    <th scope="col">Status</th>
+               
+                </tr>
+            </thead>
+            <tbody>
+                {% if status  == 'En règle'%}
+                <th scope="row">{{ mois_diffabs }}</th>
+                <th scope="row">{{montant_dette_plus}}</th>
+
+                {% elif status == 'En dette' %}
+                <th scope="row">{{ mois_diffabs }}</th>
+                <th scope="row">{{ montant_dette }}</th>
+
+                {% endif %}
+
+                <th scope="row" > 
+                    <div class="text-center">
+                                            {% if status  == 'En règle'%}
+                    <span class="badge bg-success text-dark">En règle</span>
+                    {% elif status == 'En dette' %}
+                    <span class="badge bg-danger">En dette</span>
+
+                    {% endif %}
+                </div>
+            </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="settings" role="tabpanel">
+        <table class="table table-striped table-bordered table-hovet">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Logement</th>
+                    <th scope="col">Occupant</th>
+                    <th scope="col">Unite</th>
+                    <th scope="col">Nombre de mois d'avance</th>
+                    <th scope="col">Date de paiement des dettes</th>
+                    {% if status  == 'En règle'%}
+                    <th scope="col">Mois d'avance </th>
+
+                    <th scope="col">Montant d avance</th>
+
+                    {% elif status == 'En dette' %}
+                    <th scope="col">La période d’endettement reste</th>
+                    <th scope="col">Montant de dette</th>
+
+                    {% endif %}
+
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">{{ consultation.logement}}</th>
+                    <th scope="row">{{ consultation.occupant }}</th>
+                    <th scope="row">{{ consultation.unite }}</th>
+                    <th scope="row">{{ total_months }} mois</th>
+                    <th scope="row">{{ consultation.created_at|date:"d F Y" }}</th>
+                    {% if status  == 'En règle'%}
+
+                    <th scope="row">{{ mois_diff_plus }} mois</th>
+                    <th scope="row">{{ montant_dette_plus }} DA</th>
+
+                    {% elif status == 'En dette' %}
+                    <th scope="row">{{ mois_entiers }} mois</th>
+                    <th scope="row">{{ montant_dette }} DA</th>
+
+                    {% endif %}
+
+                    <th scope="row" > 
+                        <div class="text-center">
+                            {% if status == 'Attention' %}
+                                <span class="badge bg-warning text-dark">Attention</span>
+                            {% elif status == 'En dette' %}
+                                <span class="badge bg-danger">En dette</span>
+                            {% else %}
+                            <span class="badge bg-success text-dark">En règle</span>
+
+                            {% endif %}
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        {% if status == 'En dette' %}
+
+
+        <h4>Historique de dette: {{consultation.occupant.nom_oc}} {{consultation.occupant.prenom_oc}}</h4>
+        <nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">L'historique de dette par mois</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">L'historique de dette par année</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    <table class="table table-striped table-bordered table-hovet">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Logement</th>
+                <th scope="col">Occupant</th>
+                <th scope="col">Unite</th>
+                <th scope="col">Date de paiement des dettes</th>
+                <th scope="col">Période d’endettement</th>
+                <th scope="col">Montant de dette</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for archive in archives %}
+            <tr>
+                <th scope="row">{{ archive.logement}}</th>
+                <th scope="row">{{ archive.occupant }}</th>
+                <th scope="row">{{ archive.unite }}</th>
+                <th scope="row">{{ archive.created_at }}</th>
+                <th scope="row">{{ archive.mois_entiers }}</th>
+                <th scope="row">{{ archive.montant_dette  }} DA</th>
+            </tr>
+            {%  endfor %}
+        </tbody>
+    </table>
+  </div>
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+    <table class="table table-striped table-bordered table-hovet">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Logement</th>
+                <th scope="col">Occupant</th>
+                <th scope="col">Unite</th>
+                <th scope="col">les années d’endettement</th>
+                <th scope="col">Montant de dette</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for archive in archivesyears %}
+            <tr>
+                <th scope="row">{{ archive.logement}}</th>
+                <th scope="row">{{ archive.occupant }}</th>
+                <th scope="row">{{ archive.unite }}</th>
+                <th scope="row">{{ archive.year }}</th>
+                <th scope="row">{{ archive.montant_dette  }} DA</th>
+            {%  endfor %}
+            <tr>
+                <th colspan="4" >La somme des dettes</th>
+                <th colspan="2">{{ total_dettes }} DA</th>
+              </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+  <script>
+    $(function () {
+      $('#myList a:last-child').tab('show')
+    })
+  </script>
+{% endblock %}

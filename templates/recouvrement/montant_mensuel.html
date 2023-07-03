@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Montant Mensuel Updates</title>
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="table-responsive">
+      <table class="table table-horizontal">
+        <thead>
+          <tr>
+            <th>Unite</th>
+          </tr>
+        </thead>
+        <tbody id="data">
+          {% for montant in montants %}
+          <tr class="table-row-animation">
+            <td><a href="{% url 'recouvrement:montant_mensuel_updates' montant.unite %}">{{ montant.unite }}</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    
+    
+  </body>
+</html>
