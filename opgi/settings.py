@@ -34,6 +34,10 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'channels',
+    
+    'dal',
+    'dal_select2',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +47,8 @@ INSTALLED_APPS = [
     'data',
     'chat.apps.ChatConfig',
  'accounts',
+ 'recouvrement.apps.RecouvrementConfig',
+'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [

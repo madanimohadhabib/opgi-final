@@ -2,6 +2,7 @@ asgiref==3.7.2
 channels==4.0.0
 dj-database-url==1.2.0
 Django==3.2
+-e git+https://github.com/yourlabs/django-autocomplete-light.git@2e51796eefe37a8efa6b66420e3e355cb73edc91#egg=django_autocomplete_light
 gunicorn==20.1.0
 psycopg2-binary==2.9.5
 python-dateutil==2.8.2
