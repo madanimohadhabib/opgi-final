@@ -96,11 +96,8 @@ WSGI_APPLICATION = 'opgi.wsgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("redis://red-cihkiglph6erq6jch4gg:6379")], # Update the URL here
-        },
-    },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
