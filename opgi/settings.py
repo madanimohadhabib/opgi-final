@@ -90,9 +90,9 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'opgi.asgi.application'
+#ASGI_APPLICATION = 'opgi.asgi.application'
 
-#WSGI_APPLICATION = 'opgi.wsgi.application'
+WSGI_APPLICATION = 'opgi.wsgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
@@ -133,10 +133,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'opgidb_66f0', 
-        'USER': 'opgidb_66f0_user',
-        'PASSWORD': 'zjdWQ7eLrh8DNYp69E3s4ejHHAyYw7Vh',
-        'HOST': 'dpg-cihfiadph6erq6iesdeg-a', 
+        'NAME': 'postgres', 
+        'USER': 'postgres',
+        'PASSWORD': 'Habiboutita1982gf',
+        'HOST': 'db.cimknvuzyvnilacxouvv.supabase.co', 
         'PORT': '5432',
     }
 }
