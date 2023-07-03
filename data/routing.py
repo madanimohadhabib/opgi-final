@@ -1,4 +1,3 @@
-"""
 from django.urls import re_path 
 from . import consumers
 
@@ -32,4 +31,3 @@ class SecondDBRouter:
         elif app_label == 'secondapp':
             return False
         return None
-"""
