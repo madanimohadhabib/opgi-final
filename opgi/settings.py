@@ -133,10 +133,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres', 
-        'USER': 'postgres',
-        'PASSWORD': 'Habiboutita1982gf',
-        'HOST': 'db.cimknvuzyvnilacxouvv.supabase.co', 
+        'NAME': 'opgidb_66f0', 
+        'USER': 'opgidb_66f0_user',
+        'PASSWORD': 'zjdWQ7eLrh8DNYp69E3s4ejHHAyYw7Vh',
+        'HOST': 'dpg-cihfiadph6erq6iesdeg-a', 
         'PORT': '5432',
     }
 }
