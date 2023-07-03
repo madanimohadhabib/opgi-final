@@ -96,7 +96,19 @@ WSGI_APPLICATION = 'opgi.wsgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://red-cihkiglph6erq6jch4gg:6379")], # Update the URL here
+        },
+    },
+}
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://red-cihkiglph6erq6jch4gg:6379/',
+        'OPTIONS': {
+        'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 # Database
