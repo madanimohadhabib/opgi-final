@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'data',
     'chat.apps.ChatConfig',
  'accounts',
+    'django_filters',
  'recouvrement.apps.RecouvrementConfig',
 'search.apps.SearchConfig',
 ]
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'opgi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,14 +75,30 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                                'chat.context_processors.notification_count',
+                                'recouvrement.context_processors.notification_count_recouvrement',
+                                'recouvrement.context_processors.montant_context_processor',
+                                'recouvrement.context_processors.chart_view',
+                                'chat.context_processors.count_dashboard',
+                                'recouvrement.context_processors.chart_view_consultations_par_unit',
             ],
+             'libraries':{
+            'myapp_tags': 'recouvrement.templatetags.myapp_tags',
+            
+            }
         },
     },
 ]
 
+#ASGI_APPLICATION = 'opgi.asgi.application'
+
 WSGI_APPLICATION = 'opgi.wsgi.application'
 
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -139,9 +156,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/Images')
