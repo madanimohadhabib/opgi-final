@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db import connections
-#from channels.layers import  get_channel_layer
+from channels.layers import  get_channel_layer
 from asgiref.sync import async_to_sync
 import json
 class wilaya(models.Model):

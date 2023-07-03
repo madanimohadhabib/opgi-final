@@ -4,7 +4,7 @@ from django.db import models
 import string
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-import channels.layers
+from channels.layers import  get_channel_layer
 from django.dispatch import receiver
 from asgiref.sync import async_to_sync
 from django.db.models import Sum
