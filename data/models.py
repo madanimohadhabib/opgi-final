@@ -13,9 +13,7 @@ class wilaya(models.Model):
    def __str__(self):
             return self.lib_wilaya
 
-   class Meta:
-        db_table = 'data_wilaya'
-        managed = False 
+   
         
 class Unite(models.Model):
         lib_unit = models.CharField(max_length=120,db_column='lib_unit')
@@ -24,9 +22,7 @@ class Unite(models.Model):
 
         def __str__(self):
             return self.lib_unit
-        class Meta:
-           db_table = 'data_unite'
-           managed = False 
+       
 
 class Cite(models.Model):
               lib_Cite = models.CharField(max_length=120,db_column='lib_Cite')
@@ -36,9 +32,7 @@ class Cite(models.Model):
 
               def __str__(self):
                  return self.lib_Cite
-              class Meta:
-                  db_table = 'data_cite'
-                  managed = False 
+              
 
 class Batiment (models.Model):
            lib_Batiment = models.CharField(max_length=120,db_column='lib_Batiment')
@@ -49,9 +43,7 @@ class Batiment (models.Model):
 
            def __str__(self):
                  return self.lib_Batiment
-           class Meta:
-                  db_table = 'data_batiment'
-                  managed = False 
+           
           
 class Occupant (models.Model):
        oc_id  = models.PositiveIntegerField(unique=True,db_column='oc_id')
@@ -64,9 +56,7 @@ class Occupant (models.Model):
 
        def __str__(self):
                  return self.nom_oc
-       class Meta:
-                  db_table = 'data_occupant'
-                  managed = False 
+       
 
 
 class Contrat(models.Model):
@@ -83,9 +73,7 @@ class Contrat(models.Model):
   #siglaler add to changer total 
     def __str__(self):
                  return self.occupant.nom_oc
-    class Meta:
-                  db_table = 'data_contrat'
-                  managed = False 
+    
 
 
  
@@ -121,9 +109,7 @@ class Logement (models.Model):
         created_at = models.DateTimeField(auto_now_add=True,db_column='created_at')
         def __str__(self):
                  return self.contrat.occupant.nom_oc
-        class Meta:
-                  db_table = 'data_logement'
-                  managed = False 
+        
 
 class Consultation (models.Model):
                 logement = models.ForeignKey(Logement, on_delete=models.SET,db_column='logement_id')
@@ -136,9 +122,7 @@ class Consultation (models.Model):
                 
                 def __str__(self):
                     return self.occupant.nom_oc
-                class Meta:
-                  db_table = 'data_consultation'
-                  managed = False 
+                
                
                 
 
