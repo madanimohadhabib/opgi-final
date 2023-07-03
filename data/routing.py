@@ -1,3 +1,4 @@
+"""
 from django.urls import re_path 
 from . import consumers
 
@@ -6,10 +7,10 @@ websocket_urlpatterns = [
 ]
 
 class SecondDBRouter:
-    """
-    A router to control all database operations on models in the
-    secondapp application.
-    """
+
+    #A router to control all database operations on models in the
+    #secondapp application.
+
     def db_for_read(self, model, **hints):
         if model._meta.app_label == 'secondapp':
             return 'second_db'
@@ -31,3 +32,4 @@ class SecondDBRouter:
         elif app_label == 'secondapp':
             return False
         return None
+"""
