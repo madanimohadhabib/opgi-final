@@ -90,9 +90,9 @@ TEMPLATES = [
     },
 ]
 
-#ASGI_APPLICATION = 'opgi.asgi.application'
+ASGI_APPLICATION = 'opgi.asgi.application'
 
-WSGI_APPLICATION = 'opgi.wsgi.application'
+#WSGI_APPLICATION = 'opgi.wsgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
