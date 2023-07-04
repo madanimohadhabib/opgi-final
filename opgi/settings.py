@@ -81,6 +81,7 @@ TEMPLATES = [
                                 'recouvrement.context_processors.chart_view',
                                 'chat.context_processors.count_dashboard',
                                 'recouvrement.context_processors.chart_view_consultations_par_unit',
+                                'accounts.context_processors.nombre_utilisateurs',
             ],
              'libraries':{
             'myapp_tags': 'recouvrement.templatetags.myapp_tags',

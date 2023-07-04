@@ -56,6 +56,9 @@
                                 {% elif user|is_member_of_group:'service_recouvrement' %} 
                                 {% include '../recouvrement/consultations_views.html' %}
 
+                                {% elif user|is_member_of_group:'admin' %} 
+                                {% include '../registration/nombre_utilisateurs.html' %}
+
                                 {% endif %}
 
                                 {% endblock %}

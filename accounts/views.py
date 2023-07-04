@@ -97,3 +97,16 @@ def profile(request):
         'duration_seconds': seconds,
         'is_logged_in': user.is_authenticated,
     })
+
+
+@login_required(login_url='login')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@allowed_users(allowed_roles=['admin'])
+def nombre_utilisateurs(request):
+    nombre_utilisateurs = User.objects.count()
+    
+    context = {
+        'nombre_utilisateurs':nombre_utilisateurs,
+    }
+    
+    return render(request, 'registration/nombre_utilisateurs.html', context)
