@@ -20,6 +20,7 @@ Django==3.2.20
 -e git+https://github.com/yourlabs/django-autocomplete-light.git@2e51796eefe37a8efa6b66420e3e355cb73edc91#egg=django_autocomplete_light
 django-filter==23.2
 gunicorn==20.1.0
+h11==0.14.0
 html5lib==1.1
 hyperlink==21.0.0
 idna==3.4
@@ -59,6 +60,7 @@ ua-parser==0.16.1
 uritools==4.0.1
 urllib3==2.0.3
 user-agents==2.2.0
+uvicorn==0.22.0
 webencodings==0.5.1
 xhtml2pdf==0.2.11
 zope.interface==6.0
