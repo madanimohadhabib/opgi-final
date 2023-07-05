@@ -24,14 +24,3 @@ class CustomLoginView(LoginView):
         return super().get(request, *args, **kwargs)
     
 
-def error_404(request, exception):
-    return render(request, "errors/404.html")
-
-def error_500(request, *args, **argv):
-    return render(request, "errors/404.html")
-      
-def error_403(request, exception):
-    return render(request, "errors/404.html")
-
-def error_400(request,  exception):
-    return render(request, "errors/404.html")
