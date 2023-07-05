@@ -7,7 +7,7 @@
    
 			<h1> Les  Alertes des unités</h1>
 			<ul>
-
+				{% if notifications_alert %}
 				<ul>
 				{% for notification_alert in notifications_alert %}
 				  <li>{{ notification_alert.unite }} {{ notification_alert.created_at }}
@@ -17,6 +17,9 @@
 		  
 				{% endfor %}
 				</ul>
+				{% else %}
+				<p>No notifications to display.</p>
+			  {% endif %}
 			</ul>
 		   
 		  </div>

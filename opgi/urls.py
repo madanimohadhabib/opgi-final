@@ -27,6 +27,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import re_path as url
 from django.views.static import serve
+from django.conf.urls import handler404, handler500,handler403,handler400
 
 app_name = 'opgi'
 
@@ -51,3 +52,9 @@ if settings.DEBUG:
 
 
 urlpatterns += staticfiles_urlpatterns()
+
+
+handler404 = 'opgi.views.error_404'
+handler500 = 'opgi.views.error_500'
+handler403 = 'opgi.views.error_403'
+handler400 = 'opgi.views.error_400'
