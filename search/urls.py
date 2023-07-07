@@ -12,5 +12,6 @@ urlpatterns = [
     path('occupant_detail/<int:pk>/', occupant_detail, name='occupant_detail'),
     path('get_batiments/', get_batiments, name='get_batiments'),
     path('get_cites/', get_cites, name='get_cites'),
+    path('occupant_detail_consultation/<int:pk>/', occupant_detail_consultation, name='occupant_detail_consultation'),
 
 ]

@@ -134,10 +134,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres', 
-        'USER': 'madaniopgi',
+        'NAME': 'test', 
+        'USER': 'postgres',
         'PASSWORD': 'Meftouh1991',
-        'HOST': 'madani-opgi.cs0df90ab3nv.us-east-1.rds.amazonaws.com', 
+        'HOST': 'test.cs0df90ab3nv.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }

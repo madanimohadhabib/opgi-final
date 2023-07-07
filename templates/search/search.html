@@ -91,7 +91,7 @@
                 <th scope="row">{{ consultation.logement.batiment.Cite }}</th>
                 <th scope="row">{{ consultation.logement.batiment.Cite.unite }}</th>
                 <th scope="row">{{ consultation.logement.batiment.Cite.unite.wilaya }}</th>
-                <th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail' consultation.id %}">Voir</a></th>
+                <th scope="row"><a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail_consultation' consultation.id %}">Voir</a></th>
             </tr>
             {% endfor %}
             {% elif  occupants %}

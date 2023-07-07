@@ -12,17 +12,23 @@ def calculer_dette(occupant):
 
     for consultation in Consultation.objects.filter(occupant=occupant):
         consultation_months_sum += consultation.mois
-        print("consultation_months_sum",consultation_months_sum)
-    contrat_values = Contrat.objects.get(id=occupant)
-    diff = (now.year - contrat_values.date_strt_loyer.year) * 12 + (now.month - contrat_values.date_strt_loyer.month)
-    mois_diff= (diff - consultation_months_sum)
+        print("consultation_months_sum", consultation_months_sum)
     
-    print("mois_diff",mois_diff)
-    montant_dette = contrat_values.total_of_month * mois_diff
+    contrat = Contrat.objects.filter(occupant=occupant).first()  # Retrieve a single Contrat object
 
-    
-    print("montant_dette :::::::",montant_dette)
-    return montant_dette,mois_diff
+    if contrat:
+        diff = (now.year - contrat.date_strt_loyer.year) * 12 + (now.month - contrat.date_strt_loyer.month)
+        mois_diff = diff - consultation_months_sum
+
+        print("mois_diff", mois_diff)
+        montant_dette = contrat.total_of_month * mois_diff
+
+        print("montant_dette:", montant_dette)
+        return montant_dette, mois_diff
+    else:
+        # Handle the case when no contract exists for the occupant
+        print("No contract found for the occupant")
+        return 0, 0  # Return appropriate values
 
 
 def search(queryset, search_term=None):
