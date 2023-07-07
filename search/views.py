@@ -57,8 +57,9 @@ def recherche(request):
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def occupant_detail(request, pk):
-    if   Occupant.objects.filter(id=pk).exists():
-        occupant = get_object_or_404(Occupant, pk = pk)
+    if  Occupant.objects.filter(id=pk).exists():
+        occupant = get_object_or_404(Occupant, id = pk)
+        print(occupant)
         contrats = Contrat.objects.filter(occupant=occupant)
         for contrat in contrats:
             logements= Logement.objects.filter(contrat=contrat)
@@ -99,6 +100,7 @@ def occupant_detail(request, pk):
         return redirect('home')
     else : 
         consultation = get_object_or_404(Consultation, pk = pk)
+        print(consultation)
         total_months = Consultation.objects.filter(occupant=consultation.occupant).aggregate(Sum('mois'))['mois__sum'] or 0
 
         """"

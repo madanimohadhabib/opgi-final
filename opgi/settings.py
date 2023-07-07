@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jua+cltqucqh(i_-b%4aeu_x+)-dd505_cnk-*^r@c-(r#xdk5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -135,9 +135,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres', 
-        'USER': 'postgres',
-        'PASSWORD': 'Habiboutita1982gf',
-        'HOST': 'db.hseardrmjgcwgqjyxosg.supabase.co', 
+        'USER': 'madaniopgi',
+        'PASSWORD': 'Meftouh1991',
+        'HOST': 'madani-opgi.cs0df90ab3nv.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }
