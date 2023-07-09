@@ -32,7 +32,7 @@ def recherche(request):
     if search_term:
 
      if not consultations.exists():
-        occupants = Occupant.objects.filter(Q(Q(nom_oc__icontains=search_term) | Q(prenom_oc__icontains=search_term) ))
+        occupants = Occupant.objects.filter(Q(Q(nom_oc__icontains=search_term) | Q(prenom_oc__icontains=search_term) | Q(oc_id__icontains=search_term)))
 
 
 
