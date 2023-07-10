@@ -76,23 +76,8 @@ def chart_view(request):
     return context
 
 def chart_view_consultations_par_unit(request):
-    consultation_data = Consultation.objects.annotate(date=TruncDate('created_at'))
+    unites = Unite.objects.all()
+    context = {'unites': unites}
 
-   
-
-    consultation_data = consultation_data.values('unite__lib_unit').annotate(consultation_count=Count('id')).order_by('unite__lib_unit')
-
-
-    total_consultations = 0
-
-    for data in consultation_data:
-
-        total_consultations += data['consultation_count']
-
-    lib_unit_values = [data['unite__lib_unit'] for data in consultation_data]
-
-    context = {
-        
-        'total_consultations': total_consultations,
-    }
+    
     return context

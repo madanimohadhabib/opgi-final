@@ -2,7 +2,9 @@
 {% block content %}
 {% load static %}
 
-<h1> accepter  </h1>
+<h3> Unité : {{ lib_unit }}</h3>
+<h3> Motif : "......"</h3>
+<h3> Accepter  </h3>
 <form action="{% url 'recouvrement:accepter' item  %}" method="POST">
 				
     {% csrf_token %}

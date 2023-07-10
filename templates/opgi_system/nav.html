@@ -25,9 +25,10 @@
         <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
             <ul class="navbar-nav float-start me-auto">
                 <li class="nav-item search-box">
-
+                   
                 </li>
             </ul>
+            
             {% if user|is_member_of_group:'service_contentieux' %}
 
             <a type="button" class="btn text-dark position-relative" style="margin-right: 25px;" href="{% url 'chat:notifications' %}">
@@ -55,6 +56,22 @@
                 
             </a>
             {% endif %}
+            <div class="dropdown">
+                <a class="btn dropdown-toggle" type="button" id="dropdownMenuButton"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="m-r-10 mdi mdi-account" style="font-size: 20px; color: black;"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end user-dd animated"  aria-labelledby="dropdownMenuButton">
+                {% if user|is_member_of_group:'service_contentieux' %}
+                    <p class="dropdown-item" >Service Contentieux</p>
+                    <a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="ti-user m-r-5 m-l-5"></i>
+                        {{user.username }}</a>
+                {% elif user|is_member_of_group:'service_recouvrement' %}
+                    <a class="dropdown-item" href="#">Service Recouvrement</a>
+                    <a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="ti-user m-r-5 m-l-5"></i>
+                        {{user.username }}</a>
+                {% endif %}
+                </div>
+              </div>
 
         </div>
     </nav>
@@ -67,12 +84,12 @@
             <ul id="sidebarnav">
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                     href="{% url 'home' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
-                        class="hide-menu">Dashboard</span></a></li>
+                        class="hide-menu">Tableau de bord </span></a></li>
                         {% if user|is_member_of_group:'service_contentieux' %}
 
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                     href="{% url 'chat:service_contentieux' %}" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
-                        class="hide-menu">Service contentieux</span></a></li>
+                        class="hide-menu">Traitement des dossiers</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                             href="{% url 'chat:search_archive' %}" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
                                 class="hide-menu">Archive</span></a></li>
@@ -82,7 +99,7 @@
                         {% elif user|is_member_of_group:'service_recouvrement' %} 
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                             href="{% url 'recouvrement:recouvrement' %}" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
-                                class="hide-menu">Service recouvrement</span></a></li>
+                                class="hide-menu">Les Alertes des unités</span></a></li>
                         {% endif %}
 
                         {% if user|is_member_of_group:'service_contentieux' %}
@@ -112,7 +129,7 @@
                     {% endif %}
                     <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                         href="{% url 'search:recherche'%}" aria-expanded="false"><i
-                            class="mdi mdi-magnify"></i><span class="hide-menu">search</span></a></li>  
+                            class="mdi mdi-magnify"></i><span class="hide-menu">Recherche</span></a></li>  
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                     href="{% url 'accounts:profile' %}" aria-expanded="false"><i
                         class="ti-user m-r-5 m-l-5"></i><span class="hide-menu">Profile</span></a></li>

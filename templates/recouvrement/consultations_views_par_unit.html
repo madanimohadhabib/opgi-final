@@ -1,0 +1,49 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+<h1>Statistique pour unités: {{ unit }}</h1>
+<h3>1-Le nombre des occupants: {{ total_occupants }} </h3>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<canvas id="graphTotalOccupants"></canvas>
+
+<script>
+    // Récupérer le contexte du canvas
+    var ctx = document.getElementById('graphTotalOccupants').getContext('2d');
+
+    // Créer le graphe
+    var graphTotalOccupants = new Chart(ctx, {
+        type: 'bar', // Utilisez 'bar' pour un graphe en barres
+        data: {
+            labels: ['Nombre d\'occupants et nombre de consultations'], // Libellé de l'axe des X
+            datasets: [{
+                label: 'Nombre d\'occupants', // Libellé de la série de données
+                data: [{{ total_occupants }}], // Valeur du nombre d'occupants
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond des barres
+                borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la bordure des barres
+                borderWidth: 1 // Largeur de la bordure des barres
+            },
+            {
+                label: 'Nombre consultations', // Libellé de la série de données
+                data: [{{ consultations }}], // Valeur du nombre d'occupants
+                borderColor: 'rgba(220,20,60, 0.5)',
+                    backgroundColor: 'rgba(220,20,60, 0.5)', // Couleur de la bordure des barres
+                borderWidth: 1 // Largeur de la bordure des barres
+            }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true // Commence l'axe des Y à zéro
+                }
+            }
+        }
+    });
+</script>
+<h3>2-Le nombre des occupants par batiment : </h3>
+
+<h3>3- Montant mensuel : {{ unit }}</h3>
+
+{% endblock %}

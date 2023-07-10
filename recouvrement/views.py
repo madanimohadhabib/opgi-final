@@ -37,7 +37,7 @@ def has_group(user, group_name):
 def notifications(request):
         notifications = Notification_chef_service.objects.filter(read=False).order_by('-created_at')
 
-        return render(request, 'recouvrement/notifications.html', {'notifications': notifications})
+        return render(request, 'recouvrement/notifications.html', {'title':'Notifications','notifications': notifications})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 
@@ -47,7 +47,7 @@ def notifications(request):
 def recouvrement(request):
             notifications_alert = Notification_chef_service.objects.filter(read=True).order_by('-created_at')
 
-            return render(request, 'recouvrement/recouvrement.html', {'notifications_alert': notifications_alert})
+            return render(request, 'recouvrement/recouvrement.html', {'title':'Les alertes des unités','notifications_alert': notifications_alert})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 
@@ -59,12 +59,19 @@ def accepter(request, pk):
                                             return redirect('home')
 
         elif    Notification_chef_service.objects.filter(id=pk,read =False).exists():
+            notification = Notification_chef_service.objects.get(id=pk)
+            lib_unit = notification.unite
             if request.method == 'POST':
                     Notification_chef_service.objects.filter( id=pk).update(read =True)
                     return redirect('recouvrement:recouvrement')
 
             
-            context = {'item':pk}
+            context = {
+                'title':'Notifications',
+                'subtitle':lib_unit,
+                'lib_unit':lib_unit,
+                'item':pk,
+                }
             return render(request, 'recouvrement/accepter.html', context)
         elif  Notification_chef_service.objects.filter(id=pk,read =True).exists():
                                     return redirect('home')
@@ -129,6 +136,7 @@ def montant_mensuel(request):
 
     # Pass the montants queryset and all_totals dictionary to the template
     context = {
+        'title':'Constatation',
         'montants': montants,
         'all_totals': all_totals,
     }
@@ -156,7 +164,7 @@ def montant_mensuel_updates(request, unit):
     for montant in montants:
         montant.percentage = round((montant.total_of_month / montant.total) * 100, 2)
 
-    context = {"montants": montants, "unit": unit, "years": years}
+    context = {'title':'Constatation','subtitle':unit,"montants": montants, "unit": unit, "years": years}
     return render(request, 'recouvrement/test.html', context)
  else :
                                                      return redirect('home')
@@ -181,6 +189,9 @@ def montant_mensuel_updates_anne(request, unit, anne):
         montant.percentage = round((montant.total_of_month / montant.total) * 100, 2)
 
     context = {
+        'title':'Constatation',
+        'subtitle':unit,
+        'soustitre':anne,
         "data_montant_mensuel": montants,
         "unit": unit,
         "anne": anne,
@@ -260,7 +271,7 @@ def MontantMensuel_views(request):
 def display_unites(request):
     query = request.GET.get('query', '')
     unites = Unite.objects.filter(lib_unit__icontains=query)
-    context = {'unites': unites, 'query': query}
+    context = {'title':'Constatation','unites': unites, 'query': query}
     return render(request, 'recouvrement/display_unites.html', context)
 
 @login_required(login_url='login')
@@ -330,32 +341,40 @@ def montant_mensuel_chart_par_anne(request, unit, anne):
     else :
         return redirect('home')
     
-
+########madani###########################
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['service_recouvrement'])
 def chart_view_consultations_par_unit(request):
 
-    consultation_data = Consultation.objects.annotate(date=TruncDate('created_at'))
+    unites = Unite.objects.all()
+    context = {'unites': unites}
 
-   
-
-    consultation_data = consultation_data.values('unite__lib_unit').annotate(consultation_count=Count('id')).order_by('unite__lib_unit')
-
-
-    total_consultations = 0
-
-    for data in consultation_data:
-
-        total_consultations += data['consultation_count']
-
-    lib_unit_values = [data['unite__lib_unit'] for data in consultation_data]
-
-    context = {
-        
-        'total_consultations': total_consultations,
-    }
 
     return render(request, 'recouvrement/consultations_views.html', context)
+
+########madani###########################
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['service_recouvrement'])
+def view_consultations_pour_chaque_unit(request,pk):
+    if Unite.objects.filter(pk=pk).exists():
+        unit = get_object_or_404(Unite,pk=pk)
+
+        total_occupants = Occupant.objects.filter(contrat__logement__batiment__Cite__unite=unit).count()
+        consultations = Consultation.objects.filter(logement__batiment__Cite__unite=unit).count()
+        
+        
+        
+        context = {
+            'unit': unit,
+            'total_occupants': total_occupants,
+            'consultations':consultations,
+                   }
+
+
+    return render(request, 'recouvrement/consultations_views_par_unit.html', context)
+
+########madani###########################
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['service_recouvrement'])

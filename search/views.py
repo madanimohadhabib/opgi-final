@@ -29,7 +29,7 @@ def recherche(request):
 
     logement = {}
     occupants = None # initialise la variable occupant
-    if search_term:
+    if search_term :
 
      if not consultations.exists():
         occupants = Occupant.objects.filter(Q(Q(nom_oc__icontains=search_term) | Q(prenom_oc__icontains=search_term) | Q(oc_id__icontains=search_term)))
@@ -82,7 +82,7 @@ def occupant_detail_consultation(request, pk):
     
         context = {
         'service': 'Service Recouvrement',
-        'title': 'Dashbord',
+        'title': 'Recherche',
         'subtitle': "Occupant Detail",
         'consultation': consultation,
         'archives': archives,
@@ -130,8 +130,7 @@ def occupant_detail(request, pk):
                 print("mois_diff",mois_diff)
         context = {
         'service': 'Service Recouvrement',
-        'title': 'Dashbord',
-        'subtitle': "Occupant Detail",
+        'title': 'Occupant Detail',
         'contrats': contrats,
         'logements': logements,
         'occupant': occupant,

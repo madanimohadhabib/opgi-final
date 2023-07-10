@@ -2,7 +2,7 @@
 {% block content %}
 {% load static %}
 
-<h1> Accepter le dossier pour le traitement juridique </h1>
+<h1> Accepter le dossier {{ item }} pour le traitement juridique </h1>
 <form action="{% url 'chat:accepter' item  %}" method="POST">
 				
     {% csrf_token %}

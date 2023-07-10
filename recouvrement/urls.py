@@ -28,8 +28,8 @@ urlpatterns = [
    path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
     path('montant_mensuel_chart_par_anne/<str:unit>/<int:anne>/', views.montant_mensuel_chart_par_anne, name='montant_mensuel_chart_par_anne'),#### Madani
 
- path('consultations_views/', views.chart_view_consultations_par_unit, name='consultations_views'),#### Madani
-   path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
-       path('montant_mensuel_chart_par_anne/<str:unit>/<int:anne>/', views.montant_mensuel_chart_par_anne, name='montant_mensuel_chart_par_anne'),#### Madani
-
+    path('consultations_views/', views.chart_view_consultations_par_unit, name='consultations_views'),#### Madani
+     path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
+    path('montant_mensuel_chart_par_anne/<str:unit>/<int:anne>/', views.montant_mensuel_chart_par_anne, name='montant_mensuel_chart_par_anne'),#### Madani
+    path('view_consultations_pour_chaque_unit/<int:pk>/', views.view_consultations_pour_chaque_unit, name='view_consultations_pour_chaque_unit'),#### Madani
 ]

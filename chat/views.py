@@ -104,7 +104,7 @@ def create_dossier(request,pk):
 def notifications(request):
       #sercher par non read
       notifications = Notification.objects.filter(read=False).order_by('-created_at')
-      return render(request, 'service_contentieux/notification/notification.html', {'notifications': notifications})
+      return render(request, 'service_contentieux/notification/notification.html', {'title':'Notifications','notifications': notifications})
 
 @login_required(login_url='login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -131,7 +131,10 @@ def accepter (request, pk):
             
              return redirect('chat:Occupant',pk=pk)
 
-    context = {'item':pk}
+    context = {
+        'title':'Notifications',
+        'subtitle': pk,
+        'item':pk}
     return render(request, 'service_contentieux/accepter.html', context)
  else: 
         return redirect('home')
@@ -152,6 +155,9 @@ def OccupantDetailView (request,pk):
           contrats = Contrat.objects.filter(occupant=occupant)
            # dispaly touts les info de Occupant de opgi 
           context = {
+                'title':'Traitement des dossiers',
+                'subtitle': 'Occupant détails',
+                'soustitre': pk,
                 'notifications': notifications,
                 'contrats':contrats,
                 'dossiers':dossiers,
@@ -221,6 +227,7 @@ def service_contentieux(request):
         occupant_names.extend(list(Occupant.objects.filter(oc_id=dossier.dossier).values_list('nom_oc', 'prenom_oc','oc_id')))
     
     context = {
+        'title': 'Traitement des dossiers',
         'occupant_names': occupant_names,
         'dossiers': dossiers,
         'myFilter': myFilter,
@@ -265,12 +272,19 @@ def Occupant_settings(request,pk):
            return redirect('home')
 
          
-        context = {'item':pk}
+        context = {
+            'title':'Traitement des dossiers',
+            'subtitle': 'Occupant détails',
+            'soustitre': pk,
+            'item':pk}
 
         return render(request, 'service_contentieux/Occupant_settings.html',context)
     else :
         occupant_settings_users = Service_contentieux_dossier.objects.filter(dossier=pk)
         context = {
+            'title':'Traitement des dossiers',
+            'subtitle': 'Occupant détails',
+            'soustitre': pk,
             'occupant_settings_users': occupant_settings_users,
             'item':pk,
         }
@@ -331,12 +345,13 @@ def search_archive(request):
             results = Service_contentieux_dossier_archive.objects.filter(dossier__in=occupant_ids)
             occupants_in_results = occupants.filter(oc_id__in=occupant_ids)
 
-            return render(request, 'service_contentieux/search_archive.html', {'results': results,'occupants': occupants_in_results})
+            return render(request, 'service_contentieux/search_archive.html', {'title':'Archive',
+           'results': results,'occupants': occupants_in_results})
 
-    return render(request, 'service_contentieux/search_archive.html')
+    return render(request, 'service_contentieux/search_archive.html',{'title':'Archive'})
 
 def archive_list_by_user(request, oc_id):
     occupant = get_object_or_404(Occupant, oc_id=oc_id)
     results = Service_contentieux_dossier_archive.objects.filter(dossier=occupant.oc_id)
-    return render(request, 'service_contentieux/archive_list_by_user.html', {'occupant': occupant, 'results': results})
+    return render(request, 'service_contentieux/archive_list_by_user.html', {'title':'Archive','subtitle':occupant,'occupant': occupant, 'results': results})
 

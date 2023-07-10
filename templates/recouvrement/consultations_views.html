@@ -51,18 +51,39 @@
   </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-
+    <h1>Statistique par unités :</h1>
     <div class="card-container">
       <div class="card-stat">
-          <div class="card-body bg-info text-white">
-              <center>
-                  <p class="card-title">Nombre total de consultations pour tous les unités </p>
-                  <p class="card-text" style="font-size: 32px;">{{ total_consultations }}</p>
-              </center>
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            {% for unite in unites %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <div class="card-stat">
+                <div class="card-body bg-info text-white">
+                  <center>
+                    <a href="{% url 'recouvrement:view_consultations_pour_chaque_unit' unite.id %}">
+                    <p class="card-text" style="font-size: 32px; color:white;">{{ unite.lib_unit }}</p>
+                    </a>
+                  </center>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
           </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
       </div>
-  
-  </div>
+    </div>
+    
+    
+
 
 
 
