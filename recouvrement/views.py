@@ -17,9 +17,10 @@ from dal import autocomplete
 from data.models import *
 from django.db.models.functions import TruncDate
 from django.db.models import Count
-
+from django.db.models.functions import ExtractMonth, ExtractYear
+from django.db.models import Min, Max
 import datetime
-
+from datetime import datetime
 from django.db.models import F, Sum
 from django.db.models import Sum
 register = template.Library()
@@ -357,18 +358,54 @@ def chart_view_consultations_par_unit(request):
 @allowed_users(allowed_roles=['service_recouvrement'])
 def view_consultations_pour_chaque_unit(request,pk):
     if Unite.objects.filter(pk=pk).exists():
-        unit = get_object_or_404(Unite,pk=pk)
-
-        total_occupants = Occupant.objects.filter(contrat__logement__batiment__Cite__unite=unit).count()
-        consultations = Consultation.objects.filter(logement__batiment__Cite__unite=unit).count()
+        unit = get_object_or_404(Unite, pk=pk)
         
+        # Get the minimum and maximum dates from the Consultation table
+        min_date = Consultation.objects.aggregate(Min('created_at'))['created_at__min']
+        max_date = Consultation.objects.aggregate(Max('created_at'))['created_at__max']
         
+        # Generate month choices
+        month_choices = []
+        for month in range(1, 13):
+            month_choices.append((str(month), datetime.strptime(str(month), "%m").strftime("%B")))
+        
+        # Generate year choices
+        year_choices = []
+        if min_date and max_date:
+            min_year = min_date.year
+            max_year = max_date.year
+            year_choices = [str(year) for year in range(min_year, max_year + 1)]
+        
+        # Get the selected month and year from the request
+        selected_month = request.GET.get('month')
+        selected_year = request.GET.get('year')
+        
+        # Filter consultations based on selected month and year
+        consultations = Consultation.objects.filter(
+            logement__batiment__Cite__unite=unit
+        )
+        
+        if selected_month:
+            consultations = consultations.filter(created_at__month=selected_month)
+        
+        if selected_year:
+            consultations = consultations.filter(created_at__year=selected_year)
+        
+        total_occupants = Occupant.objects.filter(
+            contrat__logement__batiment__Cite__unite=unit
+        ).count()
+        
+        consultations_count = consultations.count()
         
         context = {
             'unit': unit,
             'total_occupants': total_occupants,
-            'consultations':consultations,
-                   }
+            'consultations_count': consultations_count,
+            'month_choices': month_choices,
+            'year_choices': year_choices,
+            'selected_month': selected_month,
+            'selected_year': selected_year,
+        }
 
 
     return render(request, 'recouvrement/consultations_views_par_unit.html', context)

@@ -5,6 +5,24 @@
 <h1>Statistique pour unités: {{ unit }}</h1>
 <h3>1-Le nombre des occupants: {{ total_occupants }} </h3>
 
+<form method="GET">
+    <label for="month">Mois:</label>
+    <select name="month" id="month">
+        <option value="">Tous les mois</option>
+        {% for month_num, month_name in month_choices %}
+            <option value="{{ month_num }}" {% if selected_month == month_num %}selected{% endif %}>{{ month_name }}</option>
+        {% endfor %}
+    </select>
+    <label for="year">Année:</label>
+    <select name="year" id="year">
+        <option value="">Toutes les années</option>
+        {% for year in year_choices %}
+            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filtrer</button>
+</form>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <canvas id="graphTotalOccupants"></canvas>
 
@@ -26,7 +44,7 @@
             },
             {
                 label: 'Nombre consultations', // Libellé de la série de données
-                data: [{{ consultations }}], // Valeur du nombre d'occupants
+                data: [{{ consultations_count }}], // Valeur du nombre d'occupants
                 borderColor: 'rgba(220,20,60, 0.5)',
                     backgroundColor: 'rgba(220,20,60, 0.5)', // Couleur de la bordure des barres
                 borderWidth: 1 // Largeur de la bordure des barres
