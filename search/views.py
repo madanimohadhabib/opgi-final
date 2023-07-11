@@ -43,8 +43,7 @@ def recherche(request):
 
 
     context ={
-        'service': 'Service Recouvrement',
-        'title': "Recherche", 
+        
         'myFilter': myFilter,
         'occupants': occupants,
         'logement': logement,
@@ -81,9 +80,7 @@ def occupant_detail_consultation(request, pk):
         
     
         context = {
-        'service': 'Service Recouvrement',
-        'title': 'Recherche',
-        'subtitle': "Occupant Detail",
+        
         'consultation': consultation,
         'archives': archives,
        'archivesyears': archivesyears,
@@ -129,8 +126,7 @@ def occupant_detail(request, pk):
                 mois_diffabs= abs(mois_diff)
                 print("mois_diff",mois_diff)
         context = {
-        'service': 'Service Recouvrement',
-        'title': 'Occupant Detail',
+        
         'contrats': contrats,
         'logements': logements,
         'occupant': occupant,

@@ -88,7 +88,7 @@ def profile(request):
     browser_name = user_agent_info.browser.family if user_agent_info.browser.family else 'Unknown Browser'
 
     return render(request, 'registration/profile.html', {
-        'title': 'Profile',
+        
         'last_login': last_login,
         'device_name': device_name,
         'browser_name': browser_name,

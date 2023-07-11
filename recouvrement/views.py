@@ -38,7 +38,7 @@ def has_group(user, group_name):
 def notifications(request):
         notifications = Notification_chef_service.objects.filter(read=False).order_by('-created_at')
 
-        return render(request, 'recouvrement/notifications.html', {'title':'Notifications','notifications': notifications})
+        return render(request, 'recouvrement/notifications.html', {'notifications': notifications})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 
@@ -48,7 +48,7 @@ def notifications(request):
 def recouvrement(request):
             notifications_alert = Notification_chef_service.objects.filter(read=True).order_by('-created_at')
 
-            return render(request, 'recouvrement/recouvrement.html', {'title':'Les alertes des unités','notifications_alert': notifications_alert})
+            return render(request, 'recouvrement/recouvrement.html', {'notifications_alert': notifications_alert})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 
@@ -68,7 +68,7 @@ def accepter(request, pk):
 
             
             context = {
-                'title':'Notifications',
+               
                 'subtitle':lib_unit,
                 'lib_unit':lib_unit,
                 'item':pk,
@@ -137,7 +137,7 @@ def montant_mensuel(request):
 
     # Pass the montants queryset and all_totals dictionary to the template
     context = {
-        'title':'Constatation',
+        
         'montants': montants,
         'all_totals': all_totals,
     }
@@ -165,7 +165,7 @@ def montant_mensuel_updates(request, unit):
     for montant in montants:
         montant.percentage = round((montant.total_of_month / montant.total) * 100, 2)
 
-    context = {'title':'Constatation','subtitle':unit,"montants": montants, "unit": unit, "years": years}
+    context = {"montants": montants, "unit": unit, "years": years}
     return render(request, 'recouvrement/test.html', context)
  else :
                                                      return redirect('home')
@@ -190,7 +190,7 @@ def montant_mensuel_updates_anne(request, unit, anne):
         montant.percentage = round((montant.total_of_month / montant.total) * 100, 2)
 
     context = {
-        'title':'Constatation',
+       
         'subtitle':unit,
         'soustitre':anne,
         "data_montant_mensuel": montants,
@@ -272,7 +272,7 @@ def MontantMensuel_views(request):
 def display_unites(request):
     query = request.GET.get('query', '')
     unites = Unite.objects.filter(lib_unit__icontains=query)
-    context = {'title':'Constatation','unites': unites, 'query': query}
+    context = {'unites': unites, 'query': query}
     return render(request, 'recouvrement/display_unites.html', context)
 
 @login_required(login_url='login')
@@ -421,21 +421,28 @@ def view_consultations_pour_chaque_unit(request,pk):
 
 ########madani###########################
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['service_recouvrement'])
 def montant_mensuel_unit_annee(request, pk):
-    if    Unite.objects.filter(pk=pk).exists():
+    if Unite.objects.filter(pk=pk).exists():
         unite = Unite.objects.get(id=pk)
         lib_unit = unite.lib_unit
+        
         # Get the list of distinct years for the given unit
         years = MontantMensuel.objects.filter(unite__id=pk).values_list('annee', flat=True).distinct()
         
-
-        context = {'title':lib_unit, "unit": pk, "years": years}
+        # Filter by selected year
+        selected_year = request.GET.get('year')
+        if selected_year:
+            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk, annee=selected_year)
+        else:
+            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk)
+        
+        context = {'unite': lib_unit, 'unit': pk, 'years': years, 'selected_year': selected_year, 'montant_mensuel': montant_mensuel}
         return render(request, 'recouvrement/montant_mensuel_unit_annee.html', context)
-    else :
-                                                        return redirect('home')
+    else:
+        return redirect('home')
+
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -445,12 +452,13 @@ def montant_mensuel_unit_annee(request, pk):
 def montant_mensuel_chart_par_unit_anne(request, pk, anne):
  
     if Unite.objects.filter(pk=pk).exists() and MontantMensuel.objects.filter(annee=anne).exists() :
-
+        unite = Unite.objects.get(id=pk)
+        lib_unit = unite.lib_unit
         # Get the distinct months for the given year and unit
-        mois = MontantMensuel.objects.filter(unite__id=pk, annee=anne).order_by('mois').values_list('mois', flat=True).distinct()
+        mois = MontantMensuel.objects.filter(unite__pk=pk, annee=anne).order_by('mois').values_list('mois', flat=True).distinct()
 
         # Get the montants for the given year, unit, and months
-        montants = MontantMensuel.objects.filter(unite__id=pk, annee=anne, mois__in=mois).order_by('mois')
+        montants = MontantMensuel.objects.filter(unite__pk=pk, annee=anne, mois__in=mois).order_by('mois')
         total_all_months = montants.aggregate(total=Sum('total_of_month'))['total']
 
         for montant in montants:
@@ -462,6 +470,7 @@ def montant_mensuel_chart_par_unit_anne(request, pk, anne):
         chart_data_total_of_month = [montant.total_of_month for montant in montants]
 
         context = {
+            'unite':lib_unit,
             "data_montant_mensuel": montants,
             "unit": pk,
             "anne": anne,

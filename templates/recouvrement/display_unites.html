@@ -13,24 +13,35 @@
 <h3>Liste des unités</h3>
 </br>
 
+    {% if unites %}
     <div class="table-responsive">
         <table class="table">
+            <thead>
+                <tr>
+                  <th>Unité</th>
+                </tr>
+            </thead>
             <tbody>
                 {% for unite in unites %}
-                    <tr>
-                        <th>Unité</th>
-                        <td><a href="{% url 'recouvrement:montant_mensuel_updates'  unite.lib_unit %}">{{  unite.lib_unit }}</a></td>
-
-                    </tr>
+                <tr>
+                    <td>
+                        <a href="{% url 'recouvrement:montant_mensuel_updates'  unite.lib_unit %}">
+                        {{  unite.lib_unit }}
+                        </a>
+                    </td>
+                </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="2">Aucune unité trouvée.</td>
+                        <td colspan="1">Aucune unité trouvée.</td>
                     </tr>
                 {% endfor %}
             </tbody>
+
         </table>
     </div>
-    
+    {% else %}
+  <p>Aucune unité trouvée.</p>
+{% endif %}
     
     
     

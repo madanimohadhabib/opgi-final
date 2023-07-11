@@ -2,16 +2,46 @@
 {% block content %}
 {% load static %}
 
-<h1> Unité : {{ title }}</h1>
+<h1> Unité: {{ unite }}</h1>
 
-{% if years %}
-  <ul>  Les années :
-  {% for year in years %}
- <td><a  href="{% url 'recouvrement:montant_mensuel_chart_par_unit_anne' unit anne %}"> {{year }} </a></td>
+<form method="GET" action="">
+  <label for="year">Sélectionnez l'année:</label>
+  <select name="year" id="year">
+      <option value="">Toutes les années</option>
+      {% for year in years %}
+          <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+      {% endfor %}
+  </select>
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
+</form>
 
-  {% endfor %}
-  </ul>
+{% if montant_mensuel %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Les années</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for montant in montant_mensuel %}
+          <tr>
+            <td>
+              <a href="{% url 'recouvrement:montant_mensuel_chart_par_unit_anne' unit montant.annee %}">
+                {{ montant.annee }}
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="1">Aucune année trouvée pour l'année sélectionnée.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% else %}
+  <p>Aucune année disponible pour cette unité.</p>
 {% endif %}
 
 {% endblock %}
