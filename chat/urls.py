@@ -20,9 +20,10 @@ urlpatterns = [
 
 
     path('occupant/<int:oc_id>/pdf/', generate_pdf, name='generate_pdf'),
-    path('count_dashboard/',views.count_dashboard, name='count_dashboard'),
+    #path('count_dashboard/',views.count_dashboard, name='count_dashboard'),
         path('search_archive/', search_archive, name='search_archive'),
     path('archive_list_by_user/<int:oc_id>/', views.archive_list_by_user, name='archive_list_by_user'),
+    path('my_view_1/', views.my_view_1, name='my_view_1'),
 
 
 ]

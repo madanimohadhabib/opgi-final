@@ -65,10 +65,20 @@
                     <p class="dropdown-item" >Service Contentieux</p>
                     <a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="ti-user m-r-5 m-l-5"></i>
                         {{user.username }}</a>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}"><i class="mdi mdi-logout m-r-5 m-l-5"></i> 
+                            se déconnecter</a>
                 {% elif user|is_member_of_group:'service_recouvrement' %}
                     <a class="dropdown-item" href="#">Service Recouvrement</a>
                     <a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="ti-user m-r-5 m-l-5"></i>
                         {{user.username }}</a>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}"><i class="mdi mdi-logout m-r-5 m-l-5"></i> 
+                            se déconnecter</a>
+                {% elif user|is_member_of_group:'admin' %}
+                <a class="dropdown-item" href="#">Admin</a>
+                <a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="ti-user m-r-5 m-l-5"></i>
+                    {{user.username }}</a>
+                <a class="dropdown-item" href="{% url 'accounts:logout' %}"><i class="mdi mdi-logout m-r-5 m-l-5"></i> 
+                        se déconnecter</a>
                 {% endif %}
                 </div>
               </div>

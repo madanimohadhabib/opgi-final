@@ -1,0 +1,17 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+
+<h1> Unité : {{ title }}</h1>
+
+{% if years %}
+  <ul>  Les années :
+  {% for year in years %}
+ <td><a  href="{% url 'recouvrement:montant_mensuel_chart_par_unit_anne' unit anne %}"> {{year }} </a></td>
+
+  {% endfor %}
+  </ul>
+{% else %}
+{% endif %}
+
+{% endblock %}

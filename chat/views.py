@@ -311,7 +311,7 @@ def generate_pdf(request, oc_id):
     return response
 
 
-
+"""
 def count_dashboard(request):
      
      # Filter instances of Service_contentieux_dossier by created_by
@@ -322,6 +322,8 @@ def count_dashboard(request):
         'count': count
     }
     return render(request, 'service_contentieux/count_dashboard.html',context)
+
+"""
 
 def search_archive(request):
     if request.method == 'GET':
@@ -355,3 +357,44 @@ def archive_list_by_user(request, oc_id):
     results = Service_contentieux_dossier_archive.objects.filter(dossier=occupant.oc_id)
     return render(request, 'service_contentieux/archive_list_by_user.html', {'title':'Archive','subtitle':occupant,'occupant': occupant, 'results': results})
 
+
+
+def my_view_1(request):
+    now = datetime.now()
+    service_settings = Service_contentieux_settings.objects.first()
+
+    instances = []
+
+    # Iterate over all Contrat objects
+    for contrat in Contrat.objects.all():
+        # Calculate the number of months since date_strt_loyer for this Contrat
+        if contrat.date_strt_loyer is not None:
+            months = (now.year - contrat.date_strt_loyer.year) * 12 + (now.month - contrat.date_strt_loyer.month)
+        else:
+            months = 0
+
+        # Calculate the total difference between the number of months and the mois field for all associated Consultation objects
+        consultation_months_sum = 0
+
+        px = 0
+        for consultation in Consultation.objects.filter(occupant=contrat.occupant):
+            consultation_months_sum += consultation.mois
+        px = (months - consultation_months_sum) * contrat.total_of_month > contrat.total_of_month
+        if px:
+            print("px is True", (months - consultation_months_sum) * contrat.total_of_month)
+            # Display the occupant name if px is True
+            print("Occupant name:", contrat.occupant.nom_oc)
+            print("Number of months since date_strt_loyer:", months)
+            print("Total difference between months and mois for associated Consultation objects:", consultation_months_sum)
+            instances.append(contrat.occupant.nom_oc)
+
+        else:
+            print("px is False", (months - consultation_months_sum) * contrat.total_of_month)
+            print("Number of months since date_strt_loyer:", months)
+            print("Total difference between months and mois for associated Consultation objects:", consultation_months_sum)
+
+    context = {
+        'instances': instances
+    }
+
+    return render(request, 'service_contentieux/count_dashboard.html',context)

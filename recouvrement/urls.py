@@ -16,20 +16,23 @@ urlpatterns = [
 
 ####
 ####
-   path('montant_mensuel/', views.montant_mensuel, name='montant_mensuel'),
+    path('montant_mensuel/', views.montant_mensuel, name='montant_mensuel'),
 
     path('montant_mensuel_updates/<str:unit>/', views.montant_mensuel_updates, name='montant_mensuel_updates'),
     path('montant_mensuel_updates_anne/<str:unit>/<int:anne>/', views.montant_mensuel_updates_anne, name='montant_mensuel_updates_anne'),
     path('chart_view/', views.chart_view, name='chart_view'),
     path('unite-autocomplete/', UniteAutocomplete.as_view(), name='unite-autocomplete'),
     path('MontantMensuel_views/', views.MontantMensuel_views, name='MontantMensuel_views'),
-   path('display_unites/', views.display_unites, name='display_unites'),
+    path('display_unites/', views.display_unites, name='display_unites'),
 
-   path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
+    path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
     path('montant_mensuel_chart_par_anne/<str:unit>/<int:anne>/', views.montant_mensuel_chart_par_anne, name='montant_mensuel_chart_par_anne'),#### Madani
 
     path('consultations_views/', views.chart_view_consultations_par_unit, name='consultations_views'),#### Madani
-     path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
+    path('montant_mensuel/<str:unit>/', views.montant_mensuel_chart, name='montant_mensuel_chart'),#### Madani
     path('montant_mensuel_chart_par_anne/<str:unit>/<int:anne>/', views.montant_mensuel_chart_par_anne, name='montant_mensuel_chart_par_anne'),#### Madani
     path('view_consultations_pour_chaque_unit/<int:pk>/', views.view_consultations_pour_chaque_unit, name='view_consultations_pour_chaque_unit'),#### Madani
+    path('view_consultations_unit/<int:pk>/', views.view_consultations_unit, name='view_consultations_unit'),#### Madani
+    path('montant_mensuel_unit_annee/<int:pk>/', views.montant_mensuel_unit_annee,name='montant_mensuel_unit_annee'),##### Madani
+    path('montant_mensuel_chart_par_unit_anne/<int:pk>/<int:anne>/',views.montant_mensuel_chart_par_unit_anne,name='montant_mensuel_chart_par_unit_anne'), ##### Madani
 ]

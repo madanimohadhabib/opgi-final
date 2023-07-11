@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_filters',
  'recouvrement.apps.RecouvrementConfig',
 'search.apps.SearchConfig',
+'import_export',
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,9 @@ TEMPLATES = [
                                 'recouvrement.context_processors.notification_count_recouvrement',
                                 'recouvrement.context_processors.montant_context_processor',
                                 'recouvrement.context_processors.chart_view',
-                                'chat.context_processors.count_dashboard',
                                 'recouvrement.context_processors.chart_view_consultations_par_unit',
+                                'chat.context_processors.my_view_1',
+                                'chat.context_processors.my_view_1_Fidele',
 
             ],
              'libraries':{

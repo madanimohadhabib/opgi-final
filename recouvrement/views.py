@@ -20,7 +20,7 @@ from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.db.models import Min, Max
 import datetime
-from datetime import datetime
+
 from django.db.models import F, Sum
 from django.db.models import Sum
 register = template.Library()
@@ -353,6 +353,18 @@ def chart_view_consultations_par_unit(request):
 
     return render(request, 'recouvrement/consultations_views.html', context)
 
+
+########madani###########################
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['service_recouvrement'])
+def view_consultations_unit(request,pk):
+    if Unite.objects.filter(pk=pk).exists():
+        unit = get_object_or_404(Unite, pk=pk)
+        context = {
+            'unit': unit,
+        }
+    return render(request, 'recouvrement/consultations_unit.html', context)
+
 ########madani###########################
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['service_recouvrement'])
@@ -367,7 +379,7 @@ def view_consultations_pour_chaque_unit(request,pk):
         # Generate month choices
         month_choices = []
         for month in range(1, 13):
-            month_choices.append((str(month), datetime.strptime(str(month), "%m").strftime("%B")))
+            month_choices.append((str(month), datetime.datetime.strptime(str(month), "%m").strftime("%B")))
         
         # Generate year choices
         year_choices = []
@@ -384,12 +396,9 @@ def view_consultations_pour_chaque_unit(request,pk):
         consultations = Consultation.objects.filter(
             logement__batiment__Cite__unite=unit
         )
-        
-        if selected_month:
-            consultations = consultations.filter(created_at__month=selected_month)
-        
-        if selected_year:
-            consultations = consultations.filter(created_at__year=selected_year)
+
+        if selected_month and selected_year : 
+            consultations = consultations.filter(created_at__month=selected_month,created_at__year=selected_year)
         
         total_occupants = Occupant.objects.filter(
             contrat__logement__batiment__Cite__unite=unit
@@ -409,6 +418,63 @@ def view_consultations_pour_chaque_unit(request,pk):
 
 
     return render(request, 'recouvrement/consultations_views_par_unit.html', context)
+
+########madani###########################
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['service_recouvrement'])
+def montant_mensuel_unit_annee(request, pk):
+    if    Unite.objects.filter(pk=pk).exists():
+        unite = Unite.objects.get(id=pk)
+        lib_unit = unite.lib_unit
+        # Get the list of distinct years for the given unit
+        years = MontantMensuel.objects.filter(unite__id=pk).values_list('annee', flat=True).distinct()
+        
+
+        context = {'title':lib_unit, "unit": pk, "years": years}
+        return render(request, 'recouvrement/montant_mensuel_unit_annee.html', context)
+    else :
+                                                        return redirect('home')
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['service_recouvrement'])
+def montant_mensuel_chart_par_unit_anne(request, pk, anne):
+ 
+    if Unite.objects.filter(pk=pk).exists() and MontantMensuel.objects.filter(annee=anne).exists() :
+
+        # Get the distinct months for the given year and unit
+        mois = MontantMensuel.objects.filter(unite__id=pk, annee=anne).order_by('mois').values_list('mois', flat=True).distinct()
+
+        # Get the montants for the given year, unit, and months
+        montants = MontantMensuel.objects.filter(unite__id=pk, annee=anne, mois__in=mois).order_by('mois')
+        total_all_months = montants.aggregate(total=Sum('total_of_month'))['total']
+
+        for montant in montants:
+            montant.percentage = round((montant.total_of_month / montant.total) * 100, 2)
+        
+        # Prepare the data for the chart
+        chart_labels = [f"{montant.mois}/{montant.annee}" for montant in montants]
+        chart_data_total = [montant.total for montant in montants]
+        chart_data_total_of_month = [montant.total_of_month for montant in montants]
+
+        context = {
+            "data_montant_mensuel": montants,
+            "unit": pk,
+            "anne": anne,
+            "total_all_months": total_all_months,
+            "chart_labels": chart_labels,
+            "chart_data_total": chart_data_total,
+            "chart_data_total_of_month": chart_data_total_of_month,
+
+        }
+        return render(request, 'recouvrement/montant_mensuel_chart_par_unit_anne.html', context)
+    else :
+        return redirect('home')
+
 
 ########madani###########################
 

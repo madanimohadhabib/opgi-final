@@ -1,35 +1,96 @@
-
 {% block content %}
 {% load static %}
 <style>
-    .card-container {
+    .custom-table {
+        background-color: #f2f2f2; /* Gray background */
+    }
+
+    .custom-table th {
+        background-color: #ccc; /* Gray background for table header */
+        color: #fff; /* White text color for table header */
+    }
+
+    .custom-table td {
+        background-color: #fff; /* White background for table cells */
+    }
+
+    .horizontal-container {
         display: flex;
         justify-content: space-between;
-        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
     }
-  
-    .card-stat{
-        width: 900px;
-        border-radius: 50px;
+
+    .horizontal-container .container {
+        flex-basis: 48%;
+    }
+
+    .horizontal-container h2 {
+        margin-bottom: 20px;
     }
 </style>
-<div class="container">
-    <div class="row mt-4">
-      <div class="col-md-6 offset-md-3">
-        <h2 class="text-center"></h2>
-        <div class="card-container">
-            <div class="card-stat">
-                <div class="card-body bg-info text-white">
-                    <center>
-                        <p class="card-title"> Nombre total  des dossier  de service contentieux en cours de traitement</p>
-                        <p class="card-text" style="font-size: 32px;">{{ count }}</p>
-                    </center>
+<div class="horizontal-container">
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2 class="text-center">Liste des occupants en retard</h2>
+                <div class="card-container">
+                    <div class="card-stat">
+                        <div class="card-body">
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Occupant </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for instance in instances %}
+                                    <tr>
+                                        <td>{{ instance.0 }}</td>
+                                        <td>
+                                            <a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail'  instance.1 %}">Voir</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        
         </div>
-       
-        
-      
-
-    {% endblock %}
+    </div>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2 class="text-center">Liste des occupants fidèles</h2>
+                <div class="card-container">
+                    <div class="card-stat">
+                        <div class="card-body">
+                            <table class="table table-striped custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Occupant </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for instance in instances_Fidele %}
+                                    <tr>
+                                        <td>{{ instance.0 }}</td>
+                                        <td>
+                                            <a type="button" class="btn btn-outline-info" href="{% url 'search:occupant_detail'  instance.1 %}">Voir</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

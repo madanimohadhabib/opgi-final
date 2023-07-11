@@ -3,7 +3,7 @@
 {% load static %}
 
 <h1>Statistique pour unités: {{ unit }}</h1>
-<h3>1-Le nombre des occupants: {{ total_occupants }} </h3>
+<h1><span class="badge bg-success">Le nombre des occupants: {{ total_occupants }}</span></h1>
 
 <form method="GET">
     <label for="month">Mois:</label>
@@ -29,7 +29,7 @@
 <script>
     // Récupérer le contexte du canvas
     var ctx = document.getElementById('graphTotalOccupants').getContext('2d');
-
+    
     // Créer le graphe
     var graphTotalOccupants = new Chart(ctx, {
         type: 'bar', // Utilisez 'bar' pour un graphe en barres
@@ -55,13 +55,16 @@
             scales: {
                 y: {
                     beginAtZero: true // Commence l'axe des Y à zéro
+                    
+                    
                 }
-            }
+            },
+           
         }
     });
 </script>
-<h3>2-Le nombre des occupants par batiment : </h3>
 
-<h3>3- Montant mensuel : {{ unit }}</h3>
+
+
 
 {% endblock %}

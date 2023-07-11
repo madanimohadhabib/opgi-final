@@ -3,6 +3,7 @@ from .models import *
 from dal import autocomplete
 from data.models import *
 from django.forms import TextInput
+from import_export.admin import ImportExportModelAdmin
 
 
 
@@ -10,7 +11,8 @@ from django.forms import TextInput
 
 @admin.register(Unite)
 
-class UniteAdmin(admin.ModelAdmin):
+
+class UniteAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     search_fields = ['lib_unit']
 
 @admin.register(MontantMensuel)

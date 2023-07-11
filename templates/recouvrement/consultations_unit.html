@@ -1,0 +1,88 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<style>
+    /* CSS animation for form elements */
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animation to form elements */
+    .form-animate {
+      animation: fadeInRight 1s ease-in-out;
+    }
+
+    /* CSS animation for the chart */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Apply animation to the chart */
+    .chart-animate {
+      max-width: 100%;
+      height: auto;
+        overflow-x: scroll;
+        white-space: nowrap;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .card-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+  }
+
+  .card-stat{
+      width: 400px;
+      border-radius: 50px;
+  }
+  </style>
+
+  <h1>Statistique pour unités: {{ unit }}</h1>
+
+    <div class="card-container">
+      <div class="card-stat">
+          <div class="card-body bg-info text-white">
+              <center>
+                <a href="{% url 'recouvrement:view_consultations_pour_chaque_unit' unit.id %}">
+                  <p class="card-title" style=" color:white;">Le nombre Total des occupants</p>
+                </a>
+              </center>
+          </div>
+        </div>
+        <div class="card-stat">
+          <div class="card-body bg-success text-white">
+            <center>
+                <a href="#">
+                <p class="card-title" style=" color:white;">Le nombre des occupants par cité</p>
+                </a>
+            </center>
+        </div>
+    </div>
+    <div class="card-stat">
+        <div class="card-body bg-warning text-white">
+            <center>
+                <a href="{% url 'recouvrement:montant_mensuel_unit_annee' unit.id %}">
+                <p class="card-title" style=" color:white;">Montant mensuel pour cette unité</p>
+                <a>
+            </center>
+        </div>
+      </div>
+  
+  </div>
+
+
+
+    {% endblock %}
