@@ -17,7 +17,7 @@ class UniteAdmin(ImportExportModelAdmin,admin.ModelAdmin):
 
 @admin.register(MontantMensuel)
 
-class MontantMensuelAdmin(admin.ModelAdmin):
+class MontantMensuelAdmin(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ('unite', 'mois', 'annee', 'total', 'total_of_month')
     list_filter = ['mois', 'annee']
     search_fields = ('unite__lib_unit__icontains',)

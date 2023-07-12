@@ -35,4 +35,7 @@ urlpatterns = [
     path('view_consultations_unit/<int:pk>/', views.view_consultations_unit, name='view_consultations_unit'),#### Madani
     path('montant_mensuel_unit_annee/<int:pk>/', views.montant_mensuel_unit_annee,name='montant_mensuel_unit_annee'),##### Madani
     path('montant_mensuel_chart_par_unit_anne/<int:pk>/<int:anne>/',views.montant_mensuel_chart_par_unit_anne,name='montant_mensuel_chart_par_unit_anne'), ##### Madani
+    
+    path('occupant_consultations_pour_chaque_unit_Cite/<int:pk>/',views.occupant_consultations_pour_chaque_unit_Cite,name='occupant_consultations_pour_chaque_unit_Cite'),
+    path('view_consultations_pour_chaque_unit_Cite/<int:pk>/', views.view_consultations_pour_chaque_unit_Cite, name='view_consultations_pour_chaque_unit_Cite'),
 ]

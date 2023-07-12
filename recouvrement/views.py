@@ -353,6 +353,94 @@ def chart_view_consultations_par_unit(request):
 
     return render(request, 'recouvrement/consultations_views.html', context)
 
+############Madani########################
+
+def view_consultations_pour_chaque_unit_Cite(request, pk):
+    if Unite.objects.filter(pk=pk).exists():
+        unite = get_object_or_404(Unite, pk=pk)
+        cites = Cite.objects.filter(unite=unite)
+        selected_cite = request.GET.get('cites')
+
+        if selected_cite:
+            logement = Logement.objects.filter(batiment__Cite__lib_Cite=selected_cite)
+            logement_count = logement.count()
+            print("Logement_count:////", logement_count)
+        else:
+            logement_count = 0
+
+        lib_cites = [cite.lib_Cite for cite in cites]
+        cites = Cite.objects.filter(unite=unite).first()  # Retrieve a single Contrat object
+
+        nbr_cites= cites.nb_logts
+        # nombre de nb_logts et  logement_count par  cites + selected_month +selected_year
+        """
+        if selected_cite and selected_year and selected_month ===>
+        hna nedir mantikche nedir selected ri 2 WALA 1 YELI9e 3 selected_cite and and selected_year
+        and selected_month
+
+        """
+        context = {
+               'unite':unite,
+            'lib_cites': lib_cites,
+            'selected_cite': selected_cite,
+            'logement_count': logement_count,
+            'nbr_cites':nbr_cites,
+            'cites':cites
+        }
+
+        return render(request, 'recouvrement/consultations_views_par_unit_Cite.html', context)
+    else:
+        return HttpResponse("Unite not found.")
+    
+
+    ###
+    ##
+    #
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['service_recouvrement'])
+def occupant_consultations_pour_chaque_unit_Cite(request, pk):
+    
+    if Cite.objects.filter(pk=pk).exists():
+        cite = get_object_or_404(Cite, pk=pk)
+        min_date = Consultation.objects.aggregate(Min('created_at'))['created_at__min']
+        max_date = Consultation.objects.aggregate(Max('created_at'))['created_at__max']
+        
+        # Generate month choices
+        month_choices = []
+        for month in range(1, 13):
+            month_choices.append((str(month), datetime.datetime.strptime(str(month), "%m").strftime("%B")))
+        
+        # Generate year choices
+        year_choices = []
+        if min_date and max_date:
+            min_year = min_date.year
+            max_year = max_date.year
+            year_choices = [str(year) for year in range(min_year, max_year + 1)]
+        selected_month = request.GET.get('month')
+        selected_year = request.GET.get('year')
+
+        logement = Logement.objects.filter(batiment__Cite__lib_Cite=cite)
+        logement_count = logement.count()
+        if selected_month and selected_year:
+            consultations = Consultation.objects.filter(logement__batiment__Cite=cite, created_at__month=selected_month, created_at__year=selected_year)
+            consultations_logement_count = consultations.count()
+          
+        else:
+            consultations_logement_count = 0
+
+        context = {
+            'consultations_logement_count': consultations_logement_count,
+            'logement_count': logement_count,
+            'month_choices': month_choices,
+            'year_choices': year_choices,
+            'cite':cite,
+        }
+        return render(request, 'recouvrement/alooui.html', context)
+    else:
+        return redirect('home')
 
 ########madani###########################
 @login_required(login_url='login')

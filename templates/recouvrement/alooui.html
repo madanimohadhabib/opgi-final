@@ -1,0 +1,61 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+<form method="GET">
+    <h3> Cité:{{cite}}</h3>
+    <label for="month">Mois:</label>
+    <select name="month" id="month">
+        {% for month_num, month_name in month_choices %}
+            <option value="{{ month_num }}" {% if selected_month == month_num %}selected{% endif %}>{{ month_name }}</option>
+        {% endfor %}
+    </select>
+    <label for="year">Année:</label>
+    <select name="year" id="year">
+        {% for year in year_choices %}
+            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filtrer</button>
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<canvas id="graphTotalOccupants"></canvas>
+
+<script>
+    // Récupérer le contexte du canvas
+    var ctx = document.getElementById('graphTotalOccupants').getContext('2d');
+
+    // Créer le graphe
+    var graphTotalOccupants = new Chart(ctx, {
+        type: 'bar', // Utilisez 'bar' pour un graphe en barres
+        data: {
+            labels: ['Nombre de logement'], // Libellé de l'axe des X
+            datasets: [{
+                label: 'Nombre de logement', // Libellé de la série de données
+                data: [{{ logement_count }}], // Valeur du nombre d'occupants
+                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond des barres
+                borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la bordure des barres
+                borderWidth: 1 // Largeur de la bordure des barres
+            },
+            {
+                label: 'Nombre consultations', // Libellé de la série de données
+                data: [{{ consultations_logement_count }}], // Valeur du nombre d'occupants
+                borderColor: 'rgba(220,20,60, 0.5)',
+                    backgroundColor: 'rgba(220,20,60, 0.5)', // Couleur de la bordure des barres
+                borderWidth: 1 // Largeur de la bordure des barres
+            }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true // Commence l'axe des Y à zéro
+                }
+            }
+        }
+    });
+</script>
+
+
+{% endblock %}

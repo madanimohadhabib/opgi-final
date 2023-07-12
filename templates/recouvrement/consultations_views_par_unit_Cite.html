@@ -1,0 +1,67 @@
+{% extends '../opgi_system/layout.html' %}
+{% block content %}
+{% load static %}
+    <h1></h1>
+    
+    <form method="GET">
+        <h3> Unite: {{unite}}</h3>
+        <label for="cites">Sélectionnez une cite 
+        </label>
+
+        <select id="cites" name="cites">
+            {% for lib_cite in lib_cites %}
+                <option value="{{ lib_cite }}">{{ lib_cite }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    
+  
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<canvas id="graphTotalOccupants"></canvas>
+
+
+
+<script>
+    // Récupérer le contexte du canvas
+var ctx = document.getElementById('graphTotalOccupants').getContext('2d');
+
+// Créer le graphe
+var graphTotalOccupants = new Chart(ctx, {
+    type: 'bar', // Utilisez 'bar' pour un graphe en barres
+    data: {
+        labels: ['nombre  totale de logements dans la cite'], // Libellé de l'axe des X
+        datasets: [{
+            label: 'Nombre de logements', // Libellé de la série de données
+            data: [{{ nbr_cites }}], // Valeur du nombre d'occupants
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond des barres
+            borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la bordure des barres
+            borderWidth: 1 // Largeur de la bordure des barres
+        },
+        {
+            label: 'Nombre de  logements occupé', // Libellé de la série de données
+            data: [{{ logement_count }}], // Valeur du nombre d'occupants
+            borderColor: 'rgba(220,20,60, 0.5)',
+            backgroundColor: 'rgba(220,20,60, 0.5)', // Couleur de la bordure des barres
+            borderWidth: 1 // Largeur de la bordure des barres
+        }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true // Commence l'axe des Y à zéro
+            }
+        },
+        onClick: function(event, chartElement) {
+            // Check if logement_count is greater than 0
+            if ({{ logement_count }} > 0) {
+                // Redirect to the path with logement_count as parameter
+                window.location.href = '/recouvrement/occupant_consultations_pour_chaque_unit_Cite/{{ cites.pk }}/';
+            }
+        }
+    }
+});
+
+</script>
+    {% endblock %}
