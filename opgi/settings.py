@@ -132,7 +132,7 @@ DATABASES = {
     }
 }
 """
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -140,6 +140,17 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'Meftouh1991',
         'HOST': 'test.cs0df90ab3nv.us-east-1.rds.amazonaws.com', 
+        'PORT': '5432',
+    }
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'abcd', 
+        'USER': 'habibou',
+        'PASSWORD': 'habibou',
+        'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
 }
