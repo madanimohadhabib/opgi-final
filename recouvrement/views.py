@@ -522,9 +522,9 @@ def montant_mensuel_unit_annee(request, pk):
         # Filter by selected year
         selected_year = request.GET.get('year')
         if selected_year:
-            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk, annee=selected_year)
+            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk, annee=selected_year).values('annee').distinct()
         else:
-            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk)
+            montant_mensuel = MontantMensuel.objects.filter(unite__id=pk).values('annee').distinct()
         
         context = {'unite': lib_unit, 'unit': pk, 'years': years, 'selected_year': selected_year, 'montant_mensuel': montant_mensuel}
         return render(request, 'recouvrement/montant_mensuel_unit_annee.html', context)
