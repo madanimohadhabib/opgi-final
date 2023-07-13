@@ -3,8 +3,11 @@
 {% load static %}
 
 <h3> Unité : {{ lib_unit }}</h3>
-<h3> Motif : "......"</h3>
+</br>
+<h3> Motif : L'unité {{ lib_unit }} n’a pas atteint le taux constatations requis.</h3>
+</br>
 <h3> Accepter  </h3>
+</br>
 <form action="{% url 'recouvrement:accepter' item  %}" method="POST">
 				
     {% csrf_token %}

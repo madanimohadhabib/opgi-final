@@ -116,20 +116,9 @@ class Consultation (models.Model):
                 unite = models.ForeignKey(Unite, on_delete=models.SET)
 
                 mois=models.PositiveIntegerField()
-                created_at = models.DateTimeField(null=True)
+                created_at = models.DateTimeField(auto_now_add=True)
 
                 total =models.FloatField()
                 
                 def __str__(self):
                     return self.occupant.nom_oc
-                
-               
-                
-
-        
-     
-
-
-        
-       
-     

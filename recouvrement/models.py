@@ -128,59 +128,39 @@ def send_montant_mensuel_update(sender, instance, **kwargs):
 @receiver(post_save, sender=Consultation)
 def check_consultations_totals(sender, instance, created, **kwargs):
     if created:
-        # Get the current date
-            current_date = date.today()
-            current_month = datetime.now().month
-            current_year = datetime.now().year
-            
-# Get the last day of the current month
-            last_day_of_month = datetime(current_date.year, current_date.month, 1) + timedelta(days=32) - timedelta(days=1)
-
-# Convert the current date to a datetime object
-            current_datetime = datetime.combine(current_date, datetime.min.time())
-            consultations_totals = Consultation.objects.values('unite', 'created_at__month').annotate(total=Sum('total'))
-            for c in consultations_totals:
-                montant_mensuel_exists = MontantMensuel.objects.filter(unite=c['unite'], mois=current_month, annee=current_year).exists()
-                if not montant_mensuel_exists:
-                    print('hhhh')
-
-                else:
-                # Vérifier si la date actuelle est dans les 10 derniers jours du mois
-                #if (last_day_of_month - current_datetime).days < 10:
-
-                    # Obtenir la liste des unités dans la base de données
-                    units = MontantMensuel.objects.values_list('unite', flat=True).distinct()
-                    # Boucler sur chaque unité
-                    for unit in units:
-                        # Obtenir le total des consultations pour cette unité pour le mois actuel
-                        consultations_total_for_unit = Consultation.objects.filter(unite=unit, created_at__month=current_date.month).aggregate(total=Sum('total'))['total'] or 0
-                        montant_mensuel = MontantMensuel.objects.get(unite=unit, mois=current_date.month)  # Récupérer l'objet MontantMensuel correspondant
-                        total_fixe = montant_mensuel.total  # Accéder à l'attribut total_fixe de l'objet MontantMensuel
+        current_date = date.today()
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+        last_day_of_month = datetime(current_date.year, current_date.month, 1) + timedelta(days=32) - timedelta(days=1)
+        current_datetime = datetime.combine(current_date, datetime.min.time())
+        
+        consultations_totals = Consultation.objects.values('unite', 'created_at__month').annotate(total=Sum('total'))
+        for c in consultations_totals:
+            montant_mensuel_exists = MontantMensuel.objects.filter(unite=c['unite'], mois=current_month, annee=current_year).exists()
+            if not montant_mensuel_exists:
+                print('hhhh')
+            else:
+                units = MontantMensuel.objects.values_list('unite', flat=True).distinct()
+                for unit in units:
+                    consultations_total_for_unit = Consultation.objects.filter(unite=unit, created_at__month=current_date.month).aggregate(total=Sum('total'))['total'] or 0
+                    montant_mensuels = MontantMensuel.objects.filter(unite=unit, mois=current_date.month)
+                    for montant_mensuel in montant_mensuels:
+                        total_fixe = montant_mensuel.total
                         unite = Unite.objects.get(id=unit)
-                        lib_unit = unite.lib_unit  # Accéder à l'attribut total_fixe de l'objet MontantMensuel
+                        lib_unit = unite.lib_unit
                         instances = []
 
-                        # Récupérer l'objet MontantMensuel correspondant
-
-                        # Vérifier si le total des consultations pour chaque unité est inférieur à 60% du total_fixe
-                        if consultations_total_for_unit < (total_fixe): #* 0.6):
-                            # Si le total des consultations pour une unité est inférieur à 60% du total_fixe, créer une instance de Signal avec les détails appropriés
-                            if not Notification_chef_service.objects.filter(unite=unite,read =False).exists()  :
-
+                        if consultations_total_for_unit < (total_fixe):
+                            if not Notification_chef_service.objects.filter(unite=unite, read=False).exists():
                                 instances.append(Notification_chef_service(unite=unite))
                                 if instances:
                                     Notification_chef_service.objects.bulk_create(instances)
                                 else:
                                     print("No instances created.")
                             else:
-                                print("Signal min:",lib_unit)
-                            
+                                print("Signal min:", lib_unit)
                         else:
-                            # Sinon, supprimer toute instance existante de Signal pour cette unité
-                            print("Signal max:",lib_unit)
-            # else:
-                    # La date actuelle n'est pas dans les 10 derniers jours du mois
-                #   print("Current date is not within the last 10 days of the month")
+                            print("Signal max:", lib_unit)
 
 
 
