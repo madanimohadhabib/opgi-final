@@ -47,9 +47,9 @@ def in_group(user, group_name):
 @allowed_users(allowed_roles=['service_contentieux'])
 #@require_http_methods(["POST"])
 def post_confirmation(request,pk):
-      # Check if confirmation has already been successful
+      
     if request.session.get('confirmation_success', False):
-        # Redirect the user to the home page
+      
             return redirect('chat:Occupant',pk=pk)
 
     if request.method == 'POST':
@@ -382,9 +382,7 @@ def my_view_1(request):
             instances.append(contrat.occupant.nom_oc)
 
         else:
-            print("px is False", (months - consultation_months_sum) * contrat.total_of_month)
-            print("Number of months since date_strt_loyer:", months)
-            print("Total difference between months and mois for associated Consultation objects:", consultation_months_sum)
+            pass
 
     context = {
         'instances': instances

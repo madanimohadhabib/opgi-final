@@ -63,8 +63,9 @@ def my_model_post_save(sender, instance, created, **kwargs):
             # Vérifier si l'unité correspondante a un MontantMensuel pour le mois et l'année en question
             
             if not MontantMensuel.objects.filter(unite=c['unite'], mois=current_month, annee=current_year).exists():
+                pass
                 # Si le MontantMensuel n'existe pas, créer une nouvelle instance avec le total de consultations correspondant
-                print("hhhhotz")
+                #print("hhhhotz")
             else:
                 # Sinon, mettre à jour le total du MontantMensuel avec le total de consultations correspondant
                 montant_mensuel = MontantMensuel.objects.get(unite=c['unite'], mois=current_month, annee=current_year)
@@ -74,8 +75,9 @@ def my_model_post_save(sender, instance, created, **kwargs):
 @receiver(post_save, sender=MontantMensuel)
 def montant_mensuel_saved(sender, instance, **kwargs):
     if instance.pk is None:
+        pass
         # l'instance est nouvelle
-        print("Une nouvelle instance de MontantMensuel a été créée.")
+        #print("Une nouvelle instance de MontantMensuel a été créée.")
     else:
         # l'instance a été mise à jour
         channel_layer = get_channel_layer()
@@ -91,7 +93,7 @@ def montant_mensuel_saved(sender, instance, **kwargs):
                 }
             }
         )
-        print("L'instance de MontantMensuel a été mise à jour.")      
+        #print("L'instance de MontantMensuel a été mise à jour.")      
 
 @receiver(post_save, sender=MontantMensuel)
 def update_montant_mensuel_data(sender, instance, **kwargs):
@@ -138,7 +140,8 @@ def check_consultations_totals(sender, instance, created, **kwargs):
         for c in consultations_totals:
             montant_mensuel_exists = MontantMensuel.objects.filter(unite=c['unite'], mois=current_month, annee=current_year).exists()
             if not montant_mensuel_exists:
-                print('hhhh')
+                pass
+                #print('hhhh')
             else:
                 units = MontantMensuel.objects.values_list('unite', flat=True).distinct()
                 for unit in units:
@@ -156,11 +159,14 @@ def check_consultations_totals(sender, instance, created, **kwargs):
                                 if instances:
                                     Notification_chef_service.objects.bulk_create(instances)
                                 else:
-                                    print("No instances created.")
+                                    pass
+                                    #print("No instances created.")
                             else:
-                                print("Signal min:", lib_unit)
+                                pass
+                               # print("Signal min:", lib_unit)
                         else:
-                            print("Signal max:", lib_unit)
+                            pass
+                            #print("Signal max:", lib_unit)
 
 
 

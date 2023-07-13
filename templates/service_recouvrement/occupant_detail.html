@@ -148,7 +148,7 @@
                     <th scope="col">montant d'avance</th>
 
                     {% elif status == 'En dette' %}
-                    <th scope="col">Mois</th>
+                    <th scope="col">Mois de retard</th>
 
                     <th scope="col">montant de dette</th>
 
@@ -219,7 +219,7 @@
                     <th scope="row">{{ montant_dette_plus }} DA</th>
 
                     {% elif status == 'En dette' %}
-                    <th scope="row">{{ mois_entiers }} mois</th>
+                    <th scope="row">{{ mois_diff_plus }} mois</th>
                     <th scope="row">{{ montant_dette }} DA</th>
 
                     {% endif %}
